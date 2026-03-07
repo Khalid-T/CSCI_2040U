@@ -1,0 +1,43 @@
+# Java compiled files
+*.class
+
+# Java archives
+*.jar
+*.war
+*.ear
+
+# Build directories
+build/
+out/
+target/
+
+# Logs
+*.log
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# Environment files
+.env
+
+# Node / frontend (in case someone uses npm)
+node_modules/
+
+# SQLite temp files
+*.db-journal
+*.sqlite-shm
+*.sqlite-wal
+
+# Compiled frontend artifacts
+dist/
