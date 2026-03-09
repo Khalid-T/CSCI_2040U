@@ -1,11 +1,6 @@
 # Java compiled files
 *.class
 
-# Java archives
-*.jar
-*.war
-*.ear
-
 # Build directories
 build/
 out/
