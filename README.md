@@ -96,21 +96,6 @@ Key Features:
 
 ---
 
-## Repository Structure
-
-```
-/src
-    frontend
-    backend
-
-/docs
-    UML diagrams
-    planning documents
-
-/README.md
-```
-
----
 
 ## Current Status
 
