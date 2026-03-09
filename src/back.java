@@ -10,6 +10,21 @@ public class back{
     public void close() throws SQLException {
         conn.close();
     }
+   private void remove(String entry) throws SQLException{
+
+        PreparedStatement removed = conn.prepareStatement(
+                    "DELETE FROM plants Where common_name = ?" );
+
+        removed.setString(1,entry);
+
+
+        int done = removed.executeUpdate();
+
+
+        System.out.println("removed " + done + " entr" + (done == 1 ? "y" : "ies"));
+
+        removed.close();
+    }
 
     private void add(String Symbol,String SciName,String CommonName, String Region) throws SQLException{
 
@@ -38,6 +53,8 @@ public class back{
 
 
         app.add("test","test","test","test");
+
+        app.remove("test");
         // Scanner input = new Scanner(System.in);
 
 
