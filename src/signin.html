@@ -24,6 +24,10 @@
             overflow: hidden;
         }
 
+        header a {
+            text-decoration: none;
+        }
+
         h1 {
             font-family: 'Playfair Display', serif;
             color: #f7c2c0;
@@ -37,8 +41,12 @@
             text-align: center;
             border-radius: 4px;
             box-shadow: 8px 8px 0px #0b460b;
-            text-decoration: none;
-            font-size: 1.8rem;
+            transition: all 0.3s ease;
+        }
+
+        h1:hover {
+            transform: translateY(-5px);
+            box-shadow: 12px 12px 0px #c1d6c1;
         }
 
         .signin-container {
@@ -78,14 +86,15 @@
             font-weight: bold;
         }
 
-        input[type="email"],
+        input[type="text"],
         input[type="password"] {
             width: 100%;
             padding: 12px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            box-sizing: border-box; /* Ensures padding doesn't affect width */
+            box-sizing: border-box;
             font-family: Georgia, serif;
+            font-size: 1rem;
         }
 
         input:focus {
@@ -113,52 +122,75 @@
             transform: translateY(-2px);
         }
 
+        .signup-text {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 25px;
+            color: #555;
+        }
+
+        .signup-text a {
+            color: #106bd9;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .signup-text a:hover {
+            text-decoration: underline;
+        }
+
         .back-link {
             display: block;
             text-align: center;
             margin-top: 20px;
-            color: #666;
+            color: #888;
             text-decoration: none;
             font-size: 0.85rem;
         }
 
         .back-link:hover {
-            color: #106bd9;
-            text-decoration: underline;
+            color: #145b14;
         }
 
         .floral-accent {
             text-align: center;
             color: #7b7f32;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
         }
     </style>
 </head>
 
 <body>
 <header>
-    <a href="index.html" style="text-decoration: none;">
+    <a href="index.html">
         <h1>Flora Catalogue</h1>
     </a>
 </header>
 
 <div class="signin-container">
     <div class="login-card">
-        <h2>Sign-in</h2>
-        <form action="#">
+        <h2>Member Login</h2>
+
+        <form action="/login-endpoint" method="POST">
             <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" placeholder="botanist@example.com" required>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="e.g. FernFanatic" required>
             </div>
+
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="••••••••" required>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
             </div>
+
             <button type="submit" class="signin-btn">Enter the Garden</button>
         </form>
 
-        <a href="index.html" class="back-link">← Return to Catalogue</a>
+        <p class="signup-text">
+            No account? <a href="signup.html">Sign up here</a>
+        </p>
+
+        <a href="index.html" class="back-link">← Back to Catalogue</a>
     </div>
 </div>
 </body>
