@@ -1,56 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-
-
 <head>
-    <!-- importing font -->
-     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Flora Catalogue</title>
-<!-- making the header look nice -->
- <style>
-    h1{
-        /* font for title */
-        font-family: 'Playfair Display', serif;
-        color: #1b3d17;
 
-        /* green border around title */
-        border: 3px double #4CAF50;
-        border-left: 15px solid #2d5a27;
-        
+    <style>
+        body {
+            margin: 0;
+            font-family: Georgia, serif;
+            background-color: #f0eaea;
+        }
 
-        /* overall layout and shape */
-        padding: 20px 40px;
-        display: block;
-        width: fit-content;
-        margin: 40px auto;
-        background-color: #ffffff;
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: #f7c2c0;
+            border: 3px double #7b7f32;
+            border-left: 15px solid #106bd9;
+            padding: 20px 40px;
+            display: block;
+            width: fit-content;
+            margin: 40px auto;
+            background-color: #dedada00;
+            text-align: center;
+            border-radius: 4px;
+            box-shadow: 10px 10px 0px #0b460b;
+            transition: all 0.3s ease;
+        }
 
-        /* Text Alignment */
-        text-align: center;
-        border-radius: 15px;
-    
-    /* additional details */
-        border-radius: 4px;     /*sharp corners*/
-        box-shadow: 10px 10px 0px #e0eee0; /* A "Hard Shadow"*/
-        transition: all 0.3s ease; /* hover effect happens in 3 seconds */
+        h1:hover {
+            transform: translateY(-5px);
+            box-shadow: 15px 15px 0px #c1d6c1;
+            cursor: pointer;
+        }
 
-
-    }
-
-/* user interaction with title */
-h1:hover {
-    transform: translateY(-5px); /* moves title up slightly when you hover */
-    box-shadow: 15px 15px 0px #c1d6c1;
-    cursor: pointer;
-}
-
-/* signin style */
-
-a[href*="signin"] {
+        a[href*="signin"] {
             display: inline-block;
             background-color: #2d5a27;
             color: white;
@@ -67,115 +52,107 @@ a[href*="signin"] {
             background-color: #4CAF50;
         }
 
-
-        /* adding a block of colour behind title */
         header {
-            background-color: #e8f0e8; /* The block of color behind everything */
-            padding: 10px 10px;        /* Adds space so the text isn't cramped */
-            border-bottom: 2px solid #4CAF50; /* A thin green line to separate it from the bottom */
-            margin-bottom: 30px;       /* Pushes the rest of the website content down */
-            
-            /* This ensures the Sign In button stays inside the green block */
-            overflow: hidden; 
+            background-color: #145b14;
+            padding: 10px 10px 30px 10px;
+            border-bottom: 2px solid #4CAF50;
+            margin-bottom: 30px;
+            overflow: hidden;
         }
 
-        /*  */
         .subtitle {
-            text-align: center; 
-            font-style: italic; 
-            color: #666; 
-            margin-top: -30px;
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            margin-top: -20px;
         }
 
-        /* Container for the plant item */
-.plant-card {
-    background-color: white;
-    width: 300px;
-    margin: 20px auto; /* Centers the card */
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    text-align: center;
-}
+        .plants-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
 
-/* Styles the image to fit perfectly */
-.plant-card img {
-    width: 100%;       /* Fills the card width */
-    height: 200px;     /* Set a fixed height */
-    object-fit: cover; /* Crops image to fit without stretching */
-    border-radius: 10px;
-}
+        .plant-card {
+            background-color: white;
+            width: 250px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
 
-/* The Wishlist Button */
-.wishlist-btn {
-    background-color: #f8f9f8;
-    color: #2d5a27;
-    border: 2px solid #2d5a27;
-    padding: 10px 15px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 15px;
-    transition: 0.3s;
-}
+        .plant-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
 
-.wishlist-btn:hover {
-    background-color: #2d5a27;
-    color: white;
-}
+        .wishlist-btn {
+            background-color: #f8f9f8;
+            color: #2d5a27;
+            border: 2px solid #2d5a27;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
 
- </style>
-
+        .wishlist-btn:hover {
+            background-color: #2d5a27;
+            color: white;
+        }
+    </style>
 </head>
+
 <body>
     <header>
- <a href="./pages/signin.html">Sign In</a>
-    <h1>Flora Catalogue</h1>
-<p style="text-align: center; font-style: italic; color: #666; margin-top: -30px;">
-    Est. 2026 — Curated Botanicals
-</header>
+        <a href="./signin.html">Sign In</a>
+        <h1>Flora Catalogue</h1>
+        <p class="subtitle">Est. 2026 — Curated Botanicals</p>
+    </header>
 
-</p>
+    <div class="plants-container">
+        <div class="plant-card">
+            <img src="./Images/134097934838567213.jpg" alt="Greenland Moss">
+            <h3>Greenland Moss</h3>
+            <p>A classic indoor favorite.</p>
+            <button class="wishlist-btn" onclick="alert('Added Greenland Moss to Wishlist!')">
+                + Add to Wishlist
+            </button>
+        </div>
 
+        <div class="plant-card">
+        <img src="./Images/photo3.jpg" alt="Monstera Adansonii">
+            <h3>Monstera Adansonii</h3>
+            <p>Known for its unique leaf holes.</p>
+            <button class="wishlist-btn" onclick="alert('Added Monstera Adansonii to Wishlist!')">
+                + Add to Wishlist
+            </button>
+        </div>
 
-    <div class="plant-card">
-        <img src="./Images/134097934838567213.jpg" alt="Beautiful Scenery">
-        <h3>Greenland moss</h3>
-        <p>A classic indoor favorite.</p>
-        
-        <button class="wishlist-btn" onclick="alert('Added to Wishlist!')">
-            + Add to Wishlist
-        </button>
+        <div class="plant-card">
+            <img src="./Images/snake-plant.jpg" alt="Snake Plant">
+            <h3>Snake Plant</h3>
+            <p>Easy to care for and perfect for beginners.</p>
+            <button class="wishlist-btn" onclick="alert('Added Snake Plant to Wishlist!')">
+                + Add to Wishlist
+            </button>
+        </div>
+
+        <div class="plant-card">
+            <img src="./Images/peace-lily.jpg" alt="Peace Lily">
+            <h3>Peace Lily</h3>
+            <p>A beautiful plant with elegant white blooms.</p>
+            <button class="wishlist-btn" onclick="alert('Added Peace Lily to Wishlist!')">
+                + Add to Wishlist
+            </button>
+        </div>
     </div>
-    <div class="plant-card">
-        <img src="./Images/133859431787636984.jpg.jpg" alt="Monstera Adansonii">
-        <h3>Monstera Adansonii</h3>
-        <p>Known for its unique leaf holes.</p>
-        <button class="wishlist-btn" onclick="alert('Added Monstera to Wishlist!')">
-            + Add to Wishlist
-        </button>
-    </div>
-
-
-
-
-    <!-- div groups elements together
-    <div>
-        this makes a button
-        <button> click me</button>
-        this makes a hyperlink called "link to cool place" that leads to the youtube link
-        <a href="https://www.youtube.com/watch?v=vY2xUc4TVmY" target= "_blank"> Link to cool place </a>
-        link to another html page
-        <a href="./pages/about.html"> To about page</a>
-        inserts image
-        <img src="./Images/134097934838567213.jpg" alt="Scenery">
-
-         form helps group elements like the search and text button together
-        <form> 
-            <label for="search"> Search </label>
-            <input type="text" name="search" id="search">
-            <button type="submit">Search</button>
-        </form>
-    </div> -->
 </body>
 </html>
