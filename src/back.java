@@ -53,6 +53,7 @@ public class back{
     //---------------------------------------------------------------
 
 
+
     // ------------------------- remove fuction-----------------------
     private String remove(String entry) throws SQLException{
         if (is_admin == false){
@@ -73,6 +74,8 @@ public class back{
         return "Removed " +entry+" form the database";
     }
     //-------------------------------------------------------------------------------------
+
+
 
     // ------------------------------------ add plants to database --------------------------
     private String  add(String Symbol,String SciName,String CommonName, String Region) throws SQLException{
@@ -99,7 +102,7 @@ public class back{
 
 
 
-    //-------------------- SreachByName --------------------------------------------
+    //-------------------- SearchByName --------------------------------------------
     public List<String[]> searchByName(String name) throws SQLException {
         List<String[]> results = new ArrayList<>();
         String query = "SELECT symbol, scientific_name, common_name, state FROM plants WHERE LOWER(common_name) LIKE LOWER(?)";
@@ -120,6 +123,11 @@ public class back{
             return results;
         }
     }
+    //-------------------------------------------------------------------------------
+
+
+
+    //-------------------- SearchByName --------------------------------------------
 
     public List<String[]> searchByState(String state) throws SQLException {
         List<String[]> results = new ArrayList<>();
