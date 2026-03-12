@@ -10,20 +10,12 @@ public class back{
     private boolean is_admin =false;
     private Connection conn; // inialision conn to the database so i can acces it form anywhere
     public back() throws SQLException {
-<<<<<<< HEAD
-        conn = DriverManager.getConnection("jdbc:sqlite:database/database.db");
-=======
-        conn = DriverManager.getConnection("jdbc:sqlite:./database/plants.db");
->>>>>>> 5576297c8070d244764747b3e54d112f48a1e53b
+        conn = DriverManager.getConnection("jdbc:sqlite:./database/database.db");
     }
     public void close() throws SQLException {
         conn.close();
     }
-<<<<<<< HEAD
-=======
 
-   private void remove(String entry) throws SQLException{
->>>>>>> 5576297c8070d244764747b3e54d112f48a1e53b
 
     //------------------------------------login --------------------------------------------
 
@@ -105,47 +97,50 @@ public class back{
     }
     //-------------------------------------------------------------------------------
 
+
+
+    //-------------------- SreachByName --------------------------------------------
     public List<String[]> searchByName(String name) throws SQLException {
-    List<String[]> results = new ArrayList<>();
-    String query = "SELECT symbol, scientific_name, common_name, state FROM plants WHERE LOWER(common_name) LIKE LOWER(?)";
+        List<String[]> results = new ArrayList<>();
+        String query = "SELECT symbol, scientific_name, common_name, state FROM plants WHERE LOWER(common_name) LIKE LOWER(?)";
 
-    try (PreparedStatement searched = conn.prepareStatement(query)) {
-        searched.setString(1, "%" + name + "%");  // adding % allows partial matches
-        try (ResultSet rs = searched.executeQuery()) {
-            while (rs.next()) { 
-                results.add(new String[]{
-                    rs.getString("symbol"), rs.getString("scientific_name"),
-                    rs.getString("common_name"), rs.getString("state")
-                });
+        try (PreparedStatement searched = conn.prepareStatement(query)) {
+            searched.setString(1, "%" + name + "%");  // adding % allows partial matches
+            try (ResultSet rs = searched.executeQuery()) {
+                while (rs.next()) {
+                    results.add(new String[]{
+                            rs.getString("symbol"), rs.getString("scientific_name"),
+                            rs.getString("common_name"), rs.getString("state")
+                        });
+                }
+            }
+            return results;
+        } catch (SQLException e) {
+            System.out.println("Error searching by name: " + e.getMessage());
+            return results;
+        }
+    }
+
+    public List<String[]> searchByState(String state) throws SQLException {
+        List<String[]> results = new ArrayList<>();
+        // using LIKE instead of '=' makes it feel more like a flexible filter
+        String query = "SELECT symbol, scientific_name, common_name, state FROM plants WHERE LOWER(state) LIKE LOWER(?)";
+
+        try (PreparedStatement searched = conn.prepareStatement(query)) {
+            searched.setString(1, "%" + state + "%"); // adding % allows partial matches
+            try (ResultSet rs = searched.executeQuery()) {
+                while (rs.next()) {
+                    results.add(new String[]{
+                            rs.getString("symbol"),
+                            rs.getString("scientific_name"),
+                            rs.getString("common_name"),
+                            rs.getString("state")
+                        });
+                }
             }
         }
         return results;
-    } catch (SQLException e) {
-        System.out.println("Error searching by name: " + e.getMessage());
-        return results;
     }
-}
-
-public List<String[]> searchByState(String state) throws SQLException {
-    List<String[]> results = new ArrayList<>();
-    // using LIKE instead of '=' makes it feel more like a flexible filter
-    String query = "SELECT symbol, scientific_name, common_name, state FROM plants WHERE LOWER(state) LIKE LOWER(?)";
-
-    try (PreparedStatement searched = conn.prepareStatement(query)) {
-        searched.setString(1, "%" + state + "%"); // adding % allows partial matches
-        try (ResultSet rs = searched.executeQuery()) {
-            while (rs.next()) {
-                results.add(new String[]{
-                    rs.getString("symbol"),
-                    rs.getString("scientific_name"),
-                    rs.getString("common_name"),
-                    rs.getString("state")
-                });
-            }
-        }
-    }
-    return results;
-}
 
 
     public  static void  main(String[] args) throws  Exception{
@@ -154,12 +149,7 @@ public List<String[]> searchByState(String state) throws SQLException {
 
         back app = new back();
 
-<<<<<<< HEAD
         System.out.println("Connected to db \n\n");
-=======
-        System.out.println("Connected to db \n\n type quit to stop");
->>>>>>> 5576297c8070d244764747b3e54d112f48a1e53b
-
         //app.login("admin","admin");
         app.add("test","test","test","test");
         app.remove("test");
@@ -172,22 +162,22 @@ public List<String[]> searchByState(String state) throws SQLException {
         // Scanner input = new Scanner(System.in);
 
 
-/*
-        while (true){
-            input.nextLine();
-            if (input.equals("quit")){
-                break;
+        /*
+          while (true){
+          input.nextLine();
+          if (input.equals("quit")){
+          break;
 
-            }else if (input.equals("add")){
+          }else if (input.equals("add")){
 
 
-            }
-            
+          }
 
-        }
-         input.close();
 
-*/
+          }
+          input.close();
+
+        */
 
         app.close();
     }
