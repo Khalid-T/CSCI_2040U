@@ -1,5 +1,7 @@
 import java.sql.*;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class back{
     private Connection conn;
@@ -41,6 +43,31 @@ public class back{
 
         added.close();
     }
+
+    public List<String[]> searchByName(String name) throws SQLException { // function that searches for a plant by name
+    List<String[]> results = new ArrayList<>();
+    String query = "SELECT symbol, scientific_name, common_name, state FROM plants WHERE LOWER(common_name) LIKE LOWER(?)";
+
+    try (PreparedStatement searched = conn.prepareStatement(query)) {
+        searched.setString(1, "%" + name + "%"); // search for partial matches to what the user entered
+        
+        try (ResultSet rs = searched.executeQuery()) { // execute the query and get the results
+            while (rs.next()) {
+                String[] plantData = {
+                    rs.getString("symbol"),
+                    rs.getString("scientific_name"),
+                    rs.getString("common_name"),
+                    rs.getString("state")
+                };
+                results.add(plantData); 
+            }
+        }
+        return results;
+    } catch (SQLException e) {
+        System.out.println("Error searching for plant: " + e.getMessage());
+        return results; // returns an empty list if an error occurs
+    }
+}
 
 
     public  static void  main(String[] args) throws  Exception{
