@@ -82,6 +82,11 @@
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .plant-card:hover {
+            transform: scale(1.02);
         }
 
         .plant-card img {
@@ -89,6 +94,7 @@
             height: 180px;
             object-fit: cover;
             border-radius: 10px;
+            margin-bottom: 10px;
         }
 
         .wishlist-btn {
@@ -107,52 +113,147 @@
             background-color: #2d5a27;
             color: white;
         }
+
+        .search-container {
+            text-align: center;
+            margin: 20px auto;
+            max-width: 600px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .search-input {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 60%;
+        }
+
+        .search-select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .search-btn {
+            background-color: #145b14;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #welcome-msg {
+            text-align: center;
+            color: #2d5a27;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
 <body>
-    <header>
-        <a href="./signin.html">Sign In</a>
-        <h1>Flora Catalogue</h1>
-        <p class="subtitle">Est. 2026 — Curated Botanicals</p>
-    </header>
+<header>
+    <a href="./signin.html" id="auth-link">Sign In</a>
+    <h1>Flora Catalogue</h1>
+    <p class="subtitle">Est. 2026 — Curated Botanicals</p>
+</header>
 
-    <div class="plants-container">
-        <div class="plant-card">
-            <img src="./Images/134097934838567213.jpg" alt="Greenland Moss">
-            <h3>Greenland Moss</h3>
-            <p>A classic indoor favorite.</p>
-            <button class="wishlist-btn" onclick="alert('Added Greenland Moss to Wishlist!')">
-                + Add to Wishlist
-            </button>
-        </div>
+<div id="welcome-msg"></div>
 
-        <div class="plant-card">
-        <img src="./Images/photo3.jpg" alt="Monstera Adansonii">
-            <h3>Monstera Adansonii</h3>
-            <p>Known for its unique leaf holes.</p>
-            <button class="wishlist-btn" onclick="alert('Added Monstera Adansonii to Wishlist!')">
-                + Add to Wishlist
-            </button>
-        </div>
+<div class="search-container">
+    <select id="search-type" class="search-select">
+        <option value="name">Plant Name</option>
+        <option value="state">State/Region</option>
+    </select>
+    <input type="text" id="search-input" class="search-input" placeholder="Search the garden...">
+    <button onclick="performSearch()" class="search-btn">Search 🌿</button>
+</div>
 
-        <div class="plant-card">
-            <img src="./Images/snake-plant.jpg" alt="Snake Plant">
-            <h3>Snake Plant</h3>
-            <p>Easy to care for and perfect for beginners.</p>
-            <button class="wishlist-btn" onclick="alert('Added Snake Plant to Wishlist!')">
-                + Add to Wishlist
-            </button>
-        </div>
+<div class="plants-container" id="plants-display">
 
-        <div class="plant-card">
-            <img src="./Images/peace-lily.jpg" alt="Peace Lily">
-            <h3>Peace Lily</h3>
-            <p>A beautiful plant with elegant white blooms.</p>
-            <button class="wishlist-btn" onclick="alert('Added Peace Lily to Wishlist!')">
-                + Add to Wishlist
-            </button>
-        </div>
+    <div class="plant-card">
+        <img src="./Images/134097934838567213.jpg" alt="Greenland Moss">
+        <h3>Greenland Moss</h3>
+        <p>A classic indoor favorite.</p>
+        <button class="wishlist-btn" onclick="alert('Added Greenland Moss to Wishlist!')">+ Add to Wishlist</button>
     </div>
+
+    <div class="plant-card">
+        <img src="./Images/photo3.jpg" alt="Monstera Adansonii">
+        <h3>Monstera Adansonii</h3>
+        <p>Known for its unique leaf holes.</p>
+        <button class="wishlist-btn" onclick="alert('Added Monstera Adansonii to Wishlist!')">+ Add to Wishlist</button>
+    </div>
+
+    <div class="plant-card">
+        <img src="./Images/snake-plant.jpg" alt="Snake Plant">
+        <h3>Snake Plant</h3>
+        <p>Easy to care for and perfect for beginners.</p>
+        <button class="wishlist-btn" onclick="alert('Added Snake Plant to Wishlist!')">+ Add to Wishlist</button>
+    </div>
+
+    <div class="plant-card">
+        <img src="./Images/peace-lily.jpg" alt="Peace Lily">
+        <h3>Peace Lily</h3>
+        <p>A beautiful plant with elegant white blooms.</p>
+        <button class="wishlist-btn" onclick="alert('Added Peace Lily to Wishlist!')">+ Add to Wishlist</button>
+    </div>
+
+</div>
+
+<script>
+    // 1. Check Login Status (Same as before)
+    fetch('/get-user')
+        .then(res => { if (res.ok) return res.text(); })
+        .then(username => {
+            if (username) {
+                document.getElementById('welcome-msg').innerText = "Welcome back, " + username + "!";
+                document.getElementById('auth-link').innerText = "Logout";
+                document.getElementById('auth-link').href = "/signin.html";
+            }
+        });
+
+    // 2. Search Function
+    function performSearch() {
+        const query = document.getElementById('search-input').value;
+        const type = document.getElementById('search-type').value;
+        const display = document.getElementById('plants-display');
+
+        if (!query) return;
+
+        display.innerHTML = "<p style='width:100%; text-align:center;'>Searching the soil...</p>";
+
+        fetch(`/search-plants?q=${query}&type=${type}`)
+            .then(response => response.json())
+            .then(plants => {
+                display.innerHTML = ""; // This wipes the hard-coded plants only when results arrive
+
+                if (plants.length === 0) {
+                    display.innerHTML = "<p>No plants found. Try another search!</p>";
+                    return;
+                }
+
+                plants.forEach(plant => {
+                    const card = document.createElement('div');
+                    card.className = 'plant-card';
+                    card.innerHTML = `
+                        <div style="font-size: 3rem; margin-top:10px;">🌿</div>
+                        <h3>${plant[2]}</h3>
+                        <p><i>${plant[1]}</i></p>
+                        <p><b>State:</b> ${plant[3]}</p>
+                        <button class="wishlist-btn" onclick="alert('Added ${plant[2]} to wishlist!')">+ Add to Wishlist</button>
+                    `;
+                    display.appendChild(card);
+                });
+            })
+            .catch(err => {
+                console.error("Search failed:", err);
+                display.innerHTML = "<p>Error connecting to the garden server.</p>";
+            });
+    }
+</script>
 </body>
 </html>

@@ -125,7 +125,7 @@ public class back{
 
     public List<String[]> searchByState(String state) throws SQLException {
         List<String[]> results = new ArrayList<>();
-        // using LIKE instead of '=' makes it feel more like a flexible filter
+
         String query = "SELECT symbol, scientific_name, common_name, state FROM plants WHERE LOWER(state) LIKE LOWER(?)";
 
         try (PreparedStatement searched = conn.prepareStatement(query)) {
@@ -145,10 +145,10 @@ public class back{
     }
 
     public static void main(String[] args) throws Exception {
-        // 1. Initialize your DB connection logic
+        //connection logic
         back appLogic = new back();
 
-        // 2. Start the Javalin Server
+        //start the Javalin Server
         Javalin server = Javalin.create(config -> {
             // Tells Javalin to look in src/main/resources/static for your HTML/CSS
             config.staticFiles.add("/static");
@@ -157,22 +157,51 @@ public class back{
         System.out.println("--- Flora Catalogue Server Running ---");
         System.out.println("Go to: http://localhost:8080/signin.html");
 
-        // 3. Handle the Login Form Submission
+        //handle the Login Form Submission
         server.post("/login-endpoint", ctx -> {
-            // Add this line first!
-            System.out.println(">>> THE BUTTON WAS CLICKED! <<<");
+            System.out.println(">>> LOGIN ATTEMPT RECEIVED <<<");
 
-            // Grab values from the <input name="username"> and <input name="password">
             String user = ctx.formParam("username");
             String pass = ctx.formParam("password");
 
-            // Run your existing database login function
             if (appLogic.login(user, pass)) {
-                // Success: Send them to the plant list
+                // Store the username in a session so index.html can say "Welcome"
+                ctx.sessionAttribute("currentUser", user);
                 ctx.redirect("/index.html");
             } else {
-                // Failure: Send them back to signin with an error message
                 ctx.redirect("/signin.html?error=1");
+            }
+        });
+
+        // handle Search Requests
+        server.get("/search-plants", ctx -> {
+            String query = ctx.queryParam("q");
+            String type = ctx.queryParam("type"); // 'name' or 'state'
+
+            System.out.println(">>> SEARCHING: " + query + " BY " + type);
+
+            if (query == null || query.isEmpty()) {
+                ctx.json(new ArrayList<>());
+                return;
+            }
+
+            List<String[]> results;
+            if ("state".equalsIgnoreCase(type)) {
+                results = appLogic.searchByState(query);
+            } else {
+                results = appLogic.searchByName(query);
+            }
+
+            ctx.json(results);
+        });
+
+        //
+        server.get("/get-user", ctx -> {
+            String user = ctx.sessionAttribute("currentUser");
+            if (user != null) {
+                ctx.result(user);
+            } else {
+                ctx.status(401);
             }
         });
     }
