@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Flora Catalogue</title>
+
+  <style>
+    body {
+        margin: 0;
+        font-family: Georgia, serif;
+        background-color: #f0eaea;
+    }
+
+    header {
+        background-color: #145b14;
+        padding: 10px 10px 30px 10px;
+        border-bottom: 2px solid #4CAF50;
+        margin-bottom: 40px;
+        overflow: hidden;
+    }
+
+    h1 {
+        font-family: 'Playfair Display', serif;
+        color: #f7c2c0;
+        border: 3px double #7b7f32;
+        border-left: 15px solid #106bd9;
+        padding: 20px 40px;
+        display: block;
+        width: fit-content;
+        margin: 30px auto;
+        background-color: rgba(255,255,255,0.05);
+        text-align: center;
+        border-radius: 4px;
+        box-shadow: 10px 10px 0px #0b460b;
+    }
+
+    .subtitle {
+        text-align: center;
+        font-style: italic;
+        color: #d8d8d8;
+        margin-top: -10px;
+    }
+
+    .top-links {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .top-links a {
+        text-decoration: none;
+        color: #106bd9;
+        font-weight: bold;
+        margin: 0 10px;
+    }
+
+    .top-links a:hover {
+        text-decoration: underline;
+    }
+
+    .message-box {
+        max-width: 600px;
+        margin: 0 auto 25px auto;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #eef7ee;
+        color: #145b14;
+        text-align: center;
+        font-weight: bold;
+        display: none;
+    }
+
+    .admin-wrapper {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        padding: 20px;
+    }
+
+    .admin-card {
+        background-color: white;
+        width: 380px;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+        margin-top: 0;
+        color: #145b14;
+        font-family: 'Playfair Display', serif;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #444;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 1rem;
+    }
+
+    input[type="text"]:focus {
+        outline: none;
+        border-color: #106bd9;
+        box-shadow: 0 0 5px rgba(16, 107, 217, 0.2);
+    }
+
+    .action-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: 0.3s;
+        margin-top: 10px;
+    }
+
+    .add-btn {
+        background-color: #2d5a27;
+        color: white;
+    }
+
+    .add-btn:hover {
+        background-color: #4CAF50;
+    }
+
+    .remove-btn {
+        background-color: #9f2f2f;
+        color: white;
+    }
+
+    .remove-btn:hover {
+        background-color: #c94848;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Flora Catalogue Admin</h1>
+  <p class="subtitle">Manage plants in the catalogue</p>
+</header>
+
+<div class="top-links">
+  <a href="/index.html">Back to Catalogue</a>
+  <a href="/logout">Log Out</a>
+</div>
+
+<div id="messageBox" class="message-box"></div>
+
+<div class="admin-wrapper">
+  <div class="admin-card">
+    <h2>Add Plant</h2>
+    <form action="/add-plant" method="POST">
+      <div class="form-group">
+        <label for="symbol">Symbol</label>
+        <input type="text" id="symbol" name="symbol" required>
+      </div>
+
+      <div class="form-group">
+        <label for="scientific_name">Scientific Name</label>
+        <input type="text" id="scientific_name" name="scientific_name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="common_name">Common Name</label>
+        <input type="text" id="common_name" name="common_name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="state">State</label>
+        <input type="text" id="state" name="state" required>
+      </div>
+
+      <button type="submit" class="action-btn add-btn">Add Plant</button>
+    </form>
+  </div>
+
+  <div class="admin-card">
+    <h2>Remove Plant</h2>
+    <form action="/remove-plant" method="POST">
+      <div class="form-group">
+        <label for="remove_common_name">Common Name</label>
+        <input type="text" id="remove_common_name" name="common_name" required>
+      </div>
+
+      <button type="submit" class="action-btn remove-btn">Remove Plant</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const message = params.get("message");
+
+  if (message) {
+      const box = document.getElementById("messageBox");
+      box.textContent = message;
+      box.style.display = "block";
+  }
+</script>
+
+</body>
+</html>

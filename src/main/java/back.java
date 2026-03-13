@@ -146,7 +146,9 @@ public class back{
         }
         return results;
     }
-
+    public boolean isAdmin() {
+        return is_admin;
+    }
     public static void main(String[] args) throws Exception {
         //connection logic
         back appLogic = new back();
@@ -168,9 +170,13 @@ public class back{
             String pass = ctx.formParam("password");
 
             if (appLogic.login(user, pass)) {
-                // Store the username in a session so index.html can say "Welcome"
                 ctx.sessionAttribute("currentUser", user);
-                ctx.redirect("/index.html");
+
+                if (appLogic.isAdmin()) {
+                    ctx.redirect("/admin.html");
+                } else {
+                    ctx.redirect("/index.html");
+                }
             } else {
                 ctx.redirect("/signin.html?error=1");
             }
@@ -179,6 +185,24 @@ public class back{
             ctx.req().getSession().invalidate();
             appLogic.logout();
             ctx.redirect("/signin.html");
+        });
+        server.post("/add-plant", ctx -> {
+            String symbol = ctx.formParam("symbol");
+            String scientificName = ctx.formParam("scientific_name");
+            String commonName = ctx.formParam("common_name");
+            String state = ctx.formParam("state");
+
+            String result = appLogic.add(symbol, scientificName, commonName, state);
+
+            ctx.redirect("/admin.html?message=" + java.net.URLEncoder.encode(result, "UTF-8"));
+        });
+
+        server.post("/remove-plant", ctx -> {
+            String commonName = ctx.formParam("common_name");
+
+            String result = appLogic.remove(commonName);
+
+            ctx.redirect("/admin.html?message=" + java.net.URLEncoder.encode(result, "UTF-8"));
         });
         server.get("/search-plants", ctx -> {
             String query = ctx.queryParam("q");
