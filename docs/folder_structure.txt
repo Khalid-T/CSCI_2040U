@@ -1,0 +1,13 @@
+app/
+├── layout.js          # The Navigation bar and Header/Footer for the website
+├── page.js            # Home Page displaying all items
+├── error.js           # Global Error Page
+├── login/
+│   └── page.js        # Login Page
+├── signup/
+│   └── page.js        # Signup Page 
+├── admin/
+│   └── page.js        # Admin Dashboard
+└── items/
+    └── [id]/          # Dynamic Route Segment
+        └── page.js    # Individual Item Page (florafinder.com/items/123)
