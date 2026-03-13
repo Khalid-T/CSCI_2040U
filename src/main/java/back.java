@@ -21,7 +21,7 @@ public class back{
 
     //------------------------------------login --------------------------------------------
 
-    private boolean login(String username, String password) throws SQLException{
+    public boolean login(String username, String password) throws SQLException{
 
         PreparedStatement stmt = conn.prepareStatement( "SELECT * FROM users WHERE username = ? AND password = ?");
          stmt.setString(1,username);
@@ -173,17 +173,11 @@ public class back{
             }
         });
 
-        // handle Search Requests
         server.get("/search-plants", ctx -> {
             String query = ctx.queryParam("q");
-            String type = ctx.queryParam("type"); // 'name' or 'state'
+            String type = ctx.queryParam("type");
 
             System.out.println(">>> SEARCHING: " + query + " BY " + type);
-
-            if (query == null || query.isEmpty()) {
-                ctx.json(new ArrayList<>());
-                return;
-            }
 
             List<String[]> results;
             if ("state".equalsIgnoreCase(type)) {
@@ -192,7 +186,24 @@ public class back{
                 results = appLogic.searchByName(query);
             }
 
-            ctx.json(results);
+            // --- ROBUST MANUAL JSON FIX ---
+            StringBuilder json = new StringBuilder("[");
+            for (int i = 0; i < results.size(); i++) {
+                String[] p = results.get(i);
+                json.append("[");
+                for (int j = 0; j < p.length; j++) {
+                    // This line cleans the text so quotes and backslashes don't break the JSON
+                    String cleaned = (p[j] == null) ? "" : p[j].replace("\\", "\\\\").replace("\"", "\\\"");
+                    json.append("\"").append(cleaned).append("\"");
+                    if (j < p.length - 1) json.append(",");
+                }
+                json.append("]");
+                if (i < results.size() - 1) json.append(",");
+            }
+            json.append("]");
+
+            ctx.contentType("application/json");
+            ctx.result(json.toString());
         });
 
         //

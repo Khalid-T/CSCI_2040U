@@ -205,16 +205,20 @@
 </div>
 
 <script>
-    // 1. Check Login Status (Same as before)
+    // 1. Check Login Status
     fetch('/get-user')
-        .then(res => { if (res.ok) return res.text(); })
+        .then(res => {
+            if (res.ok) return res.text();
+        })
         .then(username => {
             if (username) {
                 document.getElementById('welcome-msg').innerText = "Welcome back, " + username + "!";
                 document.getElementById('auth-link').innerText = "Logout";
+                // Optionally, add a logout endpoint later
                 document.getElementById('auth-link').href = "/signin.html";
             }
-        });
+        })
+        .catch(err => console.log("User not logged in yet."));
 
     // 2. Search Function
     function performSearch() {
@@ -226,24 +230,32 @@
 
         display.innerHTML = "<p style='width:100%; text-align:center;'>Searching the soil...</p>";
 
-        fetch(`/search-plants?q=${query}&type=${type}`)
-            .then(response => response.json())
+        // Using relative path and encodeURIComponent to handle spaces/special characters
+        fetch(`/search-plants?q=${encodeURIComponent(query)}&type=${type}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Server error: " + response.status);
+                }
+                return response.json();
+            })
             .then(plants => {
-                display.innerHTML = ""; // This wipes the hard-coded plants only when results arrive
+                display.innerHTML = ""; // Clear hard-coded plants
 
-                if (plants.length === 0) {
-                    display.innerHTML = "<p>No plants found. Try another search!</p>";
+                if (!plants || plants.length === 0) {
+                    display.innerHTML = "<p style='width:100%; text-align:center;'>No plants found. Try another search!</p>";
                     return;
                 }
 
                 plants.forEach(plant => {
                     const card = document.createElement('div');
                     card.className = 'plant-card';
+
+                    // Displaying the plant data: plant[2] is common name, plant[1] is scientific, plant[3] is state
                     card.innerHTML = `
-                        <div style="font-size: 3rem; margin-top:10px;">🌿</div>
-                        <h3>${plant[2]}</h3>
-                        <p><i>${plant[1]}</i></p>
-                        <p><b>State:</b> ${plant[3]}</p>
+                        <div style="font-size: 3rem; margin-top:10px;"></div>
+                        <h3>${plant[2] || "Unnamed Plant"}</h3>
+                        <p><i>${plant[1] || ""}</i></p>
+                        <p><b>State:</b> ${plant[3] || "N/A"}</p>
                         <button class="wishlist-btn" onclick="alert('Added ${plant[2]} to wishlist!')">+ Add to Wishlist</button>
                     `;
                     display.appendChild(card);
@@ -251,9 +263,19 @@
             })
             .catch(err => {
                 console.error("Search failed:", err);
-                display.innerHTML = "<p>Error connecting to the garden server.</p>";
+                display.innerHTML = `<p style='width:100%; text-align:center; color:red;'>
+                    Error connecting to the garden server. <br>
+                    <small>(Make sure back.java is running in IntelliJ)</small>
+                </p>`;
             });
     }
+
+    // Optional: Allow pressing "Enter" to search
+    document.getElementById("search-input").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            performSearch();
+        }
+    });
 </script>
 </body>
 </html>
