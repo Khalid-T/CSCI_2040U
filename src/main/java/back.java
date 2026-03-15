@@ -20,6 +20,21 @@ public class back{
 
 
     //------------------------------------login --------------------------------------------
+    private String sign_up(String username, String password) throws SQLException {
+
+        String insertSql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        
+        PreparedStatement addusr = conn.prepareStatement(insertSql);
+
+        addusr.setString(1, username);
+        addusr.setString(2, password);
+        
+        addusr.executeUpdate();
+
+        System.out.println("[log] User " + username + " created (non-admin)");
+        return "User " + username + " has been added and is not admin";
+    } 
+
     public void logout(){
         System.out.println("[log] admin has logged off");
         is_admin = false; 
