@@ -84,7 +84,8 @@ You can start the Flora Catalogue server either directly through your IDE VS Cod
 ### Option 1: IDE Method
 
 1. **Open the Project:** Launch VS Code and ensure your project folder is open.
-2. **Launch the Backend:** * Navigate to `src/main/java/back.java`.
+2. **Launch the Backend:** 
+   * Navigate to `src/main/java/back.java`.
    * Click the **Run** button located directly above the `public static void main` method (or press `F5`).
 3. **Check the Terminal:** Look for the following confirmation message in the VS Code integrated terminal:
    ```text
