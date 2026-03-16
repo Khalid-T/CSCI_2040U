@@ -49,7 +49,8 @@ The Plant Catalogue System is a web application that lets administrators upload 
 ### Iteration 1: The "Demo Ready" Sprint (Labs 5–7)
 * **Goal:** Establish a functional Minimum Viable Product (MVP).
 * **Focus:** Core data handling and the admin-user loop.
-* **Key Deliverables:** * Successful cleaning and integration of the 100-plant regional database.
+* **Key Deliverables:** 
+    * Successful cleaning and integration of the 100-plant regional database.
     * Admin "Add/Remove" functionality.
     * User "Search/Filter" functionality.
     * Role-based Login/Logout system.
@@ -59,7 +60,8 @@ The Plant Catalogue System is a web application that lets administrators upload 
 ### Iteration 2: Quality & User Experience (Labs 8–10)
 * **Goal:** Improve system flexibility, UI aesthetics, and account recovery.
 * **Focus:** Refining the database schema to allow for "Updates" and polishing the frontend.
-* **Key Deliverables:** * Password Reset workflow.
+* **Key Deliverables:** 
+    * Password Reset workflow.
     * Update functionality for plant descriptions and photos.
     * Alphabetical sorting and UI Polish.
     * Unit testing on core classes and Statechart diagram design.
@@ -67,7 +69,8 @@ The Plant Catalogue System is a web application that lets administrators upload 
 ### Iteration 3: Final Features & Delivery (Labs 11–12)
 * **Goal:** Implement advanced logic and final project hand-off.
 * **Focus:** SQL-based recommendations and simulation of a purchasing flow.
-* **Key Deliverables:** * Recommendation system based on user activity.
+* **Key Deliverables:** 
+    * Recommendation system based on user activity.
     * Purchasing/Checkout simulation.
     * Complete test suite utilizing Mock Objects for database isolation.
     * Final bug fixes and deployment preparation.
