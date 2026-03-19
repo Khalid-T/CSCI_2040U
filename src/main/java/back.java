@@ -5,8 +5,6 @@ import java.util.List;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-// compile using ---- javac -cp ".;lib/*" src/back.java
-// run using ---- java -cp ".;src;lib/*" back
 
 public class back{
     private boolean is_admin =false;
@@ -20,21 +18,28 @@ public class back{
 
 
     //------------------------------------login --------------------------------------------
-    private String sign_up(String username, String password) throws SQLException {
+    private String sign_up(String username, String password, int  admin) throws SQLException {
 
-        String insertSql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        String insertSql = "INSERT INTO users (username, password, admin) VALUES (?, ?, ?)";
         
         PreparedStatement addusr = conn.prepareStatement(insertSql);
 
         addusr.setString(1, username);
         addusr.setString(2, password);
-        
+        addusr.setInt(3, admin);
+
         addusr.executeUpdate();
 
-        System.out.println("[log] User " + username + " created (non-admin)");
-        return "User " + username + " has been added and is not admin";
-    } 
+        if (admin == 0){
+             System.out.println("[log] User " + username + " created (non-admin)");
+             return "User " + username + " has been added and is not admin";
 
+        }else{
+             System.out.println("[log] User " + username + " created (non-admin)");
+             return "User " + username + " has been added and is not admin";
+
+        }
+    } 
     public void logout(){
         System.out.println("[log] admin has logged off");
         is_admin = false; 
