@@ -127,4 +127,86 @@ public class BackTest {
         String result = app.remove("Rose");
         assertTrue(result.contains("Removed"));
     }
+
+    //--------------------- SEARCH TESTS ----------------------
+    
+    // helper method to seed the database
+    private void seedSearchData() throws SQLException {
+        String sql = "INSERT INTO plants (symbol, scientific_name, common_name, state) VALUES (?, ?, ?, ?)";
+        try (java.sql.PreparedStatement stmt = app.conn.prepareStatement(sql)) {
+            
+            // alabama samples
+            stmt.setString(1, "ABTH");
+            stmt.setString(2, "Abutilon theophrasti Medik.");
+            stmt.setString(3, "VELVETLEAF");
+            stmt.setString(4, "Alabama");
+            stmt.addBatch();
+
+            stmt.setString(1, "ACRU");
+            stmt.setString(2, "Acer rubrum L.");
+            stmt.setString(3, "RED MAPLE");
+            stmt.setString(4, "Alabama");
+            stmt.addBatch();
+
+            // arizona samples
+            stmt.setString(1, "ABAN");
+            stmt.setString(2, "Abronia angustifolia Greene");
+            stmt.setString(3, "purple sand-verbena");
+            stmt.setString(4, "Arizona");
+            stmt.addBatch();
+
+            // nevada samples
+            stmt.setString(1, "ABBA");
+            stmt.setString(2, "Abies balsamea (L.) Mill.");
+            stmt.setString(3, "balsam fir");
+            stmt.setString(4, "Nevada");
+            stmt.addBatch();
+
+            stmt.executeBatch();
+        }
+    }
+
+    @Test
+    void testSearchByNameFound() throws SQLException {
+        seedSearchData();
+        // verifies the search can find a specific common name
+        java.util.List<String[]> results = app.searchByName("RED MAPLE");
+        
+        assertFalse(results.isEmpty());
+        assertEquals("ACRU", results.get(0)[0]); 
+    }
+
+    @Test
+    void testSearchByStateAlabama() throws SQLException {
+        seedSearchData();
+        // since we seeded 2 Alabama plants, we expect exactly 2 back
+        java.util.List<String[]> results = app.searchByState("Alabama");
+        assertEquals(2, results.size(), "Alabama should return 2 seeded results");
+    }
+
+    @Test
+    void testSearchByStateNevada() throws SQLException {
+        seedSearchData();
+        // verifies the state filter works for different regions
+        java.util.List<String[]> results = app.searchByState("Nevada");
+        assertEquals(1, results.size());
+        assertEquals("balsam fir", results.get(0)[2]);
+    }
+
+    @Test
+    void testSearchByStateNoResults() throws SQLException {
+        seedSearchData();
+        // verifies that a state not in the "10 states" list returns an empty list
+        java.util.List<String[]> results = app.searchByState("California");
+        assertTrue(results.isEmpty(), "Should be empty for states not in our 10-state list");
+    }
+
+    @Test
+    void testSearchByStateCaseSensitivity() throws SQLException {
+        seedSearchData();
+        // testing if SQL query is case-sensitive for state names
+        java.util.List<String[]> results = app.searchByState("arizona");
+        
+        assertFalse(results.isEmpty(), "Search should ideally be case-insensitive for user ease");
+    }
 }
