@@ -171,7 +171,6 @@ public class BackTest {
         seedSearchData();
         // verifies the search can find a specific common name
         java.util.List<String[]> results = app.searchByName("RED MAPLE");
-        
         assertFalse(results.isEmpty());
         assertEquals("ACRU", results.get(0)[0]); 
     }
@@ -204,7 +203,7 @@ public class BackTest {
     @Test
     void testSearchByStateCaseSensitivity() throws SQLException {
         seedSearchData();
-        // testing if SQL query is case-sensitive for state names
+        // testing if your SQL query is case-sensitive for state names
         java.util.List<String[]> results = app.searchByState("arizona");
         
         assertFalse(results.isEmpty(), "Search should ideally be case-insensitive for user ease");
