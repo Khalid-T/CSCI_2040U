@@ -8,7 +8,7 @@ import io.javalin.http.Context;
 
 public class back{
     private boolean is_admin =false;
-    private Connection conn; // inialision conn to the database so i can acces it form anywhere
+    public Connection conn; // inialision conn to the database so i can acces it form anywhere
     public back() throws SQLException {
         conn = DriverManager.getConnection("jdbc:sqlite:./database/database.db");
     }
@@ -79,7 +79,7 @@ public class back{
 
 
     // ------------------------- remove fuction-----------------------
-    private String remove(String entry) throws SQLException{
+    public String remove(String entry) throws SQLException{
         if (is_admin == false){
              System.out.println("[log] login first");
             return "login as an admin first";
@@ -100,7 +100,7 @@ public class back{
     //-------------------------------------------------------------------------------------
 
     // ------------------------------------ add plants to database --------------------------
-    private String  add(String Symbol,String SciName,String CommonName, String Region) throws SQLException{
+    public String  add(String Symbol,String SciName,String CommonName, String Region) throws SQLException{
         if (is_admin == false){
             System.out.println("[log] login first");
             return "login as admin before adding plants";

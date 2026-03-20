@@ -17,11 +17,11 @@ CSCI 2040U – Software Design and Analysis
 
 The Plant Catalogue System is a web application that lets administrators upload and manage plant information while users search and filter plants by characteristics (e.g., light, soil, region, price). The goal is to help people quickly locate plants suited to their needs without scrolling large catalogues.
 
-## Dependencies
+## Prerequisites
 
-- slf4j-api-2.0.9.jar
-- slf4j-simple-2.0.9.jar
-- sqlite-jdbc-3.45.1.0.jar
+- JDK 17+
+- Maven 3.9+
+- Project dependencies are managed via `pom.xml`.
 
 ---
 
@@ -79,7 +79,7 @@ The Plant Catalogue System is a web application that lets administrators upload 
 
 ## Build & Run Instructions
 
-You can start the Flora Catalogue server either directly through your IDE VS Code or by using the terminal with Maven.
+You can start the Plant Catalogue server either directly through your IDE VS Code or by using the terminal with Maven.
 
 ### Option 1: IDE Method
 
@@ -91,16 +91,19 @@ You can start the Flora Catalogue server either directly through your IDE VS Cod
    ```text
    --- Flora Catalogue Server Running ---
    Go to: http://localhost:8080/signin.html
-
+   ```
 ### Option 2: Maven / Terminal Method
 
 1. **Prepare Environment:** Ensure JDK 17+ and Maven are installed.
 2. **Clean Project:** Run `mvn clean` to remove old build artifacts.
 3. **Install Dependencies:** Run `mvn install` to download required libraries (SQLite, SLF4J).
-4. **Compile & Package:** Run `mvn package` to generate the executable.
-5. **Launch:** Start the server using:
+4. **Run Tests:** `mvn test`
+5. **Compile & Package:** Run `mvn package` to generate the executable.
+6. **Launch:** Start the server using:
    ```bash
    mvn exec:java -Dexec.mainClass="back"
+   ```
+
 
 ---
 
@@ -116,4 +119,5 @@ You can start the Flora Catalogue server either directly through your IDE VS Cod
 
 ## Current Status
 
-Login/search baseline works; add/remove and logout are underway; later iteration features (password reset, purchasing, recommendations) are still pending.
+
+Login, search, add, remove, logout, login all work; sign up is almost finished;  Reset password being worked on; later iteration features are still being designed .
