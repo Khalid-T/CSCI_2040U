@@ -21,7 +21,7 @@ The Plant Catalogue System is a web application that lets administrators upload 
 
 - JDK 17+
 - Maven 3.9+
-- Project dependencies are managed via `pom.xml` (no manual jar downloads needed).
+- Project dependencies are managed via `pom.xml`.
 
 ---
 
@@ -119,4 +119,5 @@ You can start the Plant Catalogue server either directly through your IDE VS Cod
 
 ## Current Status
 
-Login/search baseline works; add/remove and logout are underway; later iteration features (password reset, purchasing, recommendations) are still pending.
+
+Login, search, add, remove, logout, login all work; sign up is almost finished;  Reset password being worked on; later iteration features are still being designed .
