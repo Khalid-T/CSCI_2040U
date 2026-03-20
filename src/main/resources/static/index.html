@@ -1,226 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flora Catalogue</title>
+    <title>Flora Catalogue — Curated Botanicals</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
     <style>
+        :root {
+            --forest: #1a3c34;
+            --sage: #7b8d7e;
+            --parchment: #f9f7f2;
+            --gold: #c5a059;
+            --text: #2c2c2c;
+        }
+
         body {
             margin: 0;
-            font-family: Georgia, serif;
-            background-color: #f0eaea;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--parchment);
+            color: var(--text);
+            line-height: 1.6;
         }
 
-        h1 {
-            font-family: 'Playfair Display', serif;
-            color: #f7c2c0;
-            border: 3px double #7b7f32;
-            border-left: 15px solid #106bd9;
-            padding: 20px 40px;
-            display: block;
-            width: fit-content;
-            margin: 40px auto;
-            background-color: #dedada00;
-            text-align: center;
-            border-radius: 4px;
-            box-shadow: 10px 10px 0px #0b460b;
-            transition: all 0.3s ease;
+        /* 1. Navigation */
+        .glass-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: white;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        h1:hover {
-            transform: translateY(-5px);
-            box-shadow: 15px 15px 0px #c1d6c1;
-            cursor: pointer;
-        }
-
-        a[href*="signin"] {
-            display: inline-block;
-            background-color: #2d5a27;
-            color: white;
-            padding: 10px 20px;
+        .nav-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--forest);
             text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background 0.3s;
-            float: right;
-            margin: 10px;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
 
-        a[href*="signin"]:hover {
-            background-color: #4CAF50;
-        }
-
-        header {
-            background-color: #145b14;
-            padding: 10px 10px 30px 10px;
-            border-bottom: 2px solid #4CAF50;
-            margin-bottom: 30px;
-            overflow: hidden;
-        }
-
-        .subtitle {
-            text-align: center;
-            font-style: italic;
-            color: #666;
-            margin-top: -20px;
-        }
-
-        .plants-container {
+        .nav-right {
             display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
-            padding: 20px;
+            align-items: center;
         }
 
-        .plant-card {
-            background-color: white;
-            width: 250px;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.2s;
+        .nav-cta {
+            padding: 10px 25px;
+            border: 1px solid var(--forest);
+            color: var(--forest);
+            text-decoration: none;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
         }
 
-        .plant-card:hover {
-            transform: scale(1.02);
-        }
-
-        .plant-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        .wishlist-btn {
-            background-color: #f8f9f8;
-            color: #2d5a27;
-            border: 2px solid #2d5a27;
-            padding: 10px 15px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 15px;
-            transition: 0.3s;
-        }
-
-        .wishlist-btn:hover {
-            background-color: #2d5a27;
+        .nav-cta:hover {
+            background: var(--forest);
             color: white;
-        }
-
-        .search-container {
-            text-align: center;
-            margin: 20px auto;
-            max-width: 600px;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        .search-input {
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 60%;
-        }
-
-        .search-select {
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        .search-btn {
-            background-color: #145b14;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
         }
 
         #welcome-msg {
+            margin-right: 20px;
+            font-size: 0.8rem;
+            color: var(--sage);
+            font-weight: 500;
+        }
+
+        /* 2. Hero Section */
+        .hero-header {
             text-align: center;
-            color: #2d5a27;
-            font-weight: bold;
+            padding: 100px 20px 140px;
+            background: linear-gradient(to bottom, rgba(26, 60, 52, 0.05), transparent);
+        }
+
+        .hero-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--forest);
+        }
+
+        .pre-title {
+            font-size: 0.7rem;
+            letter-spacing: 5px;
+            color: var(--gold);
             margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            font-style: italic;
+            color: var(--sage);
+            font-family: 'Cormorant Garamond', serif;
+            margin-top: 5px;
+        }
+
+        /* 3. Search Section */
+        .search-section {
+            max-width: 900px;
+            margin: -60px auto 80px;
+            padding: 0 20px;
+        }
+
+        .search-bar-wrapper {
+            background: white;
+            display: flex;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .search-filter {
+            background: #fcfcfc;
+            border: none;
+            border-right: 1px solid #eee;
+            padding: 0 20px;
+            font-family: inherit;
+            color: var(--sage);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .search-field {
+            flex-grow: 1;
+            border: none;
+            padding: 20px 25px;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .search-trigger {
+            background: var(--forest);
+            color: white;
+            border: none;
+            padding: 0 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-trigger:hover {
+            background: #25554a;
+        }
+
+        /* 4. Catalogue Grid */
+        .catalogue-grid {
+            display: grid;
+            /* Changed auto-fill to auto-fit for better centering logic */
+            grid-template-columns: repeat(auto-fit, minmax(320px, 350px));
+            gap: 50px;
+            padding: 0 5% 100px;
+            justify-content: center;
+            max-width: 1400px; /* Prevents the grid from getting too wide on huge monitors */
+            margin: 0 auto;    /* Centers the whole grid container */
+        }
+
+        .plant-card {
+            background: white;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+        }
+
+        .plant-card:hover {
+            transform: translateY(-12px);
+        }
+
+        .image-wrapper {
+            position: relative;
+            height: 350px;
+            background: #f4f1ec;
+            overflow: hidden;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(10%) sepia(5%);
+            transition: transform 1s ease;
+        }
+
+        .plant-card:hover .image-wrapper img {
+            transform: scale(1.08);
+        }
+
+        .plant-info {
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .plant-info h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            margin: 0 0 5px;
+            color: var(--forest);
+        }
+
+        .scientific-name {
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--sage);
+            margin-bottom: 5px;
+        }
+
+        .region-tag {
+            font-size: 0.7rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .wishlist-action {
+            background: none;
+            border: none;
+            color: var(--forest);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 10px;
+            border-bottom: 1px solid var(--gold);
+            transition: 0.3s;
+        }
+
+        .wishlist-action:hover {
+            background: var(--forest);
+            color: white;
+            border-bottom-color: var(--forest);
+        }
+
+        .status-msg {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 100px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--sage);
         }
     </style>
 </head>
-
 <body>
-<header>
-    <a href="./signin.html" id="auth-link">Sign In</a>
-    <h1>Flora Catalogue</h1>
-    <p class="subtitle">Est. 2026 — Curated Botanicals</p>
+
+<nav class="glass-nav">
+    <a href="index.html" class="nav-logo">Flora Catalogue</a>
+    <div class="nav-right">
+        <span id="welcome-msg"></span>
+        <a href="./signin.html" id="auth-link" class="nav-cta">Sign In</a>
+    </div>
+</nav>
+
+<header class="hero-header">
+    <div class="hero-content">
+        <p class="pre-title">EST. 2026</p>
+        <h1>FloraFinder</h1>
+        <p class="subtitle">Curated Botanicals for the Modern Collector</p>
+    </div>
 </header>
 
-<div id="welcome-msg"></div>
+<section class="search-section">
+    <div class="search-bar-wrapper">
+        <select id="search-type" class="search-filter">
+            <option value="name">Specimen Name</option>
+            <option value="state">Native Region</option>
+        </select>
+        <input type="text" id="search-input" class="search-field" placeholder="Search the collection...">
+        <button onclick="performSearch()" class="search-trigger">Explore</button>
+    </div>
+</section>
 
-<div class="search-container">
-    <select id="search-type" class="search-select">
-        <option value="name">Plant Name</option>
-        <option value="state">State/Region</option>
-    </select>
-    <input type="text" id="search-input" class="search-input" placeholder="Search the garden...">
-    <button onclick="performSearch()" class="search-btn">Search 🌿</button>
-</div>
+<!-- Replace your <main id="plants-display"> section with this complete version -->
 
-<div class="plants-container" id="plants-display">
+<main id="plants-display" class="catalogue-grid">
 
+    <!-- 1. Greenland Moss -->
     <div class="plant-card">
-        <img src="./Images/134097934838567213.jpg" alt="Greenland Moss">
-        <h3>Greenland Moss</h3>
-        <p>A classic indoor favorite.</p>
-        <button class="wishlist-btn" onclick="alert('Added Greenland Moss to Wishlist!')">+ Add to Wishlist</button>
+        <div class="image-wrapper">
+            <img src="./Images/134097934838567213.jpg" alt="Greenland Moss">
+        </div>
+        <div class="plant-info">
+            <h3>Greenland Moss</h3>
+            <p class="scientific-name">Bryophyta groenlandica</p>
+            <span class="region-tag">Region: Arctic Tundra</span>
+            <button class="wishlist-action" onclick="alert('Added Greenland Moss to Collection!')">+ Add to Collection</button>
+        </div>
     </div>
 
+    <!-- 2. Monstera Adansonii -->
     <div class="plant-card">
-        <img src="./Images/photo3.jpg" alt="Monstera Adansonii">
-        <h3>Monstera Adansonii</h3>
-        <p>Known for its unique leaf holes.</p>
-        <button class="wishlist-btn" onclick="alert('Added Monstera Adansonii to Wishlist!')">+ Add to Wishlist</button>
+        <div class="image-wrapper">
+            <img src="./Images/photo3.jpg" alt="Monstera Adansonii">
+        </div>
+        <div class="plant-info">
+            <h3>Monstera Adansonii</h3>
+            <p class="scientific-name">Monstera adansonii</p>
+            <span class="region-tag">Region: Central America</span>
+            <button class="wishlist-action" onclick="alert('Added Monstera Adansonii to Collection!')">+ Add to Collection</button>
+        </div>
     </div>
 
+    <!-- 3. Snake Plant (Added Back) -->
     <div class="plant-card">
-        <img src="./Images/snake-plant.jpg" alt="Snake Plant">
-        <h3>Snake Plant</h3>
-        <p>Easy to care for and perfect for beginners.</p>
-        <button class="wishlist-btn" onclick="alert('Added Snake Plant to Wishlist!')">+ Add to Wishlist</button>
+        <div class="image-wrapper">
+            <img src="./Images/snake-plant.jpg" alt="Snake Plant">
+        </div>
+        <div class="plant-info">
+            <h3>Snake Plant</h3>
+            <p class="scientific-name">Dracaena trifasciata</p>
+            <span class="region-tag">Region: West Africa</span>
+            <button class="wishlist-action" onclick="alert('Added Snake Plant to Collection!')">+ Add to Collection</button>
+        </div>
     </div>
 
+    <!-- 4. Peace Lily (Added Back) -->
     <div class="plant-card">
-        <img src="./Images/peace-lily.jpg" alt="Peace Lily">
-        <h3>Peace Lily</h3>
-        <p>A beautiful plant with elegant white blooms.</p>
-        <button class="wishlist-btn" onclick="alert('Added Peace Lily to Wishlist!')">+ Add to Wishlist</button>
+        <div class="image-wrapper">
+            <img src="./Images/peace-lily.jpg" alt="Peace Lily">
+        </div>
+        <div class="plant-info">
+            <h3>Peace Lily</h3>
+            <p class="scientific-name">Spathiphyllum</p>
+            <span class="region-tag">Region: Southeast Asia</span>
+            <button class="wishlist-action" onclick="alert('Added Peace Lily to Collection!')">+ Add to Collection</button>
+        </div>
     </div>
 
-</div>
+</main>
 
 <script>
-    // 1. Check Login Status
+    // 1. AUTHENTICATION LOGIC
     fetch('/get-user')
-        .then(res => {
-            if (res.ok) return res.text();
-        })
+        .then(res => res.ok ? res.text() : null)
         .then(username => {
-            if (username) {
-                document.getElementById('welcome-msg').innerText = "Welcome back, " + username + "!";
-                document.getElementById('auth-link').innerText = "Logout";
-                // Optionally, add a logout endpoint later
-                document.getElementById('auth-link').href = "/signin.html";
+            const authLink = document.getElementById('auth-link');
+            const welcomeMsg = document.getElementById('welcome-msg');
+            if (username && username.trim() !== "") {
+                welcomeMsg.innerText = `Welcome back, ${username}`;
+                authLink.innerText = "Logout";
+                authLink.href = "/signin.html"; // Adjust to /logout if you have a specific route
             }
         })
-        .catch(err => console.log("User not logged in yet."));
+        .catch(err => console.log("Guest browsing mode active."));
 
-    // 2. Search Function
+    // 2. SEARCH LOGIC
     function performSearch() {
         const query = document.getElementById('search-input').value;
         const type = document.getElementById('search-type').value;
@@ -228,21 +363,18 @@
 
         if (!query) return;
 
-        display.innerHTML = "<p style='width:100%; text-align:center;'>Searching the soil...</p>";
+        display.innerHTML = "<div class='status-msg'>Consulting the botanical archives...</div>";
 
-        // Using relative path and encodeURIComponent to handle spaces/special characters
         fetch(`/search-plants?q=${encodeURIComponent(query)}&type=${type}`)
             .then(response => {
-                if (!response.ok) {
-                    throw new Error("Server error: " + response.status);
-                }
+                if (!response.ok) throw new Error("Connection lost");
                 return response.json();
             })
             .then(plants => {
-                display.innerHTML = ""; // Clear hard-coded plants
+                display.innerHTML = ""; // Clear existing grid
 
                 if (!plants || plants.length === 0) {
-                    display.innerHTML = "<p style='width:100%; text-align:center;'>No plants found. Try another search!</p>";
+                    display.innerHTML = "<div class='status-msg'>No specimens found matching your criteria.</div>";
                     return;
                 }
 
@@ -250,32 +382,31 @@
                     const card = document.createElement('div');
                     card.className = 'plant-card';
 
-                    // Displaying the plant data: plant[2] is common name, plant[1] is scientific, plant[3] is state
+                    // Note: plant[0]=ID, plant[1]=Scientific, plant[2]=Common, plant[3]=State
                     card.innerHTML = `
-                        <div style="font-size: 3rem; margin-top:10px;"></div>
-                        <h3>${plant[2] || "Unnamed Plant"}</h3>
-                        <p><i>${plant[1] || ""}</i></p>
-                        <p><b>State:</b> ${plant[3] || "N/A"}</p>
-                        <button class="wishlist-btn" onclick="alert('Added ${plant[2]} to wishlist!')">+ Add to Wishlist</button>
+                        <div class="image-wrapper">
+                            <div style="display:flex; height:100%; align-items:center; justify-content:center; background:#f4f1ec; color:#7b8d7e; font-size:3rem;">🌿</div>
+                        </div>
+                        <div class="plant-info">
+                            <h3>${plant[2] || "Unnamed Specimen"}</h3>
+                            <p class="scientific-name">${plant[1] || "Species unclassified"}</p>
+                            <span class="region-tag">Native to: ${plant[3] || "Various Regions"}</span>
+                            <button class="wishlist-action" onclick="alert('Added ${plant[2]} to collection!')">+ Add to Collection</button>
+                        </div>
                     `;
                     display.appendChild(card);
                 });
             })
             .catch(err => {
-                console.error("Search failed:", err);
-                display.innerHTML = `<p style='width:100%; text-align:center; color:red;'>
-                    Error connecting to the garden server. <br>
-                    <small>(Make sure back.java is running in IntelliJ)</small>
-                </p>`;
+                display.innerHTML = `<div class='status-msg' style='color:#a34a4a;'>Archive connection error. <br><small>Ensure back.java is active in IntelliJ</small></div>`;
             });
     }
 
-    // Optional: Allow pressing "Enter" to search
-    document.getElementById("search-input").addEventListener("keypress", function(event) {
-        if (event.key === "Enter") {
-            performSearch();
-        }
+    // 3. ENTER KEY SUPPORT
+    document.getElementById("search-input").addEventListener("keypress", (e) => {
+        if (e.key === "Enter") performSearch();
     });
 </script>
+
 </body>
 </html>

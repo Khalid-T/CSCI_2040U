@@ -276,10 +276,10 @@ public class back{
                 // Register the user as a normal user (admin = 0)
                 appLogic.sign_up(user, pass, 0);
 
-                // OPTION A: Redirect to Sign-In (Recommended for security)
+
                 ctx.redirect("/signin.html?registered=true");
 
-                // OPTION B: Redirect to Home Page (If you want them logged in immediately)
+
                 // ctx.sessionAttribute("currentUser", user);
                 // ctx.redirect("/index.html");
 

@@ -1,31 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - Flora Catalogue</title>
+    <title>Sign Up — Flora Catalogue</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
     <style>
-        /* Reusing your existing styles for consistency */
-        body { margin: 0; font-family: Georgia, serif; background-color: #f0eaea; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background-color: #145b14; padding: 10px 10px 30px 10px; border-bottom: 2px solid #4CAF50; margin-bottom: 50px; }
-        h1 { font-family: 'Playfair Display', serif; color: #f7c2c0; border: 3px double #7b7f32; border-left: 15px solid #106bd9; padding: 15px 30px; width: fit-content; margin: 20px auto; background-color: rgba(255, 255, 255, 0.05); text-align: center; border-radius: 4px; box-shadow: 8px 8px 0px #0b460b; }
-        .container { flex-grow: 1; display: flex; justify-content: center; align-items: flex-start; padding: 20px; }
-        .card { background-color: white; width: 100%; max-width: 400px; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border-top: 5px solid #106bd9; }
-        h2 { font-family: 'Playfair Display', serif; color: #145b14; text-align: center; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #444; }
-        input[type="text"], input[type="password"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        .signup-btn { width: 100%; background-color: #106bd9; color: white; padding: 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .signup-btn:hover { background-color: #0d54a8; }
-        .login-link { display: block; text-align: center; margin-top: 20px; color: #145b14; text-decoration: none; font-size: 0.9rem; }
+        /* Reusing exact styles from signin for consistency */
+        :root { --forest: #1a3c34; --sage: #7b8d7e; --parchment: #f9f7f2; --gold: #c5a059; --text: #2c2c2c; }
+        body { margin: 0; font-family: 'Montserrat', sans-serif; background-color: var(--parchment); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; }
+        .glass-nav { display: flex; justify-content: center; padding: 20px 5%; background: white; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--forest); text-decoration: none; letter-spacing: 1px; font-weight: 600; }
+        .auth-container { flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+        .auth-card { background: white; padding: 50px; width: 100%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); text-align: center; }
+        h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; color: var(--forest); margin-bottom: 10px; }
+        .subtitle { font-size: 0.8rem; color: var(--sage); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
+        .form-group { text-align: left; margin-bottom: 20px; }
+        label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); display: block; margin-bottom: 8px; }
+        input { width: 100%; padding: 12px; border: 1px solid #eee; font-family: inherit; box-sizing: border-box; outline: none; }
+        .signup-btn { width: 100%; background: var(--forest); color: white; padding: 15px; border: none; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; cursor: pointer; margin-top: 10px; transition: 0.4s; }
+        .signup-btn:hover { background: #25554a; }
+        .footer-links { margin-top: 30px; font-size: 0.85rem; }
+        .footer-links a { color: var(--sage); text-decoration: none; border-bottom: 1px solid var(--gold); }
     </style>
 </head>
 <body>
-<header><h1>Flora Catalogue</h1></header>
-<div class="container">
-    <div class="card">
-        <h2>Grow Your Account</h2>
+
+<nav class="glass-nav">
+    <a href="index.html" class="nav-logo">Flora Catalogue</a>
+</nav>
+
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>Join the Collection</h2>
+        <p class="subtitle">Create Your Profile</p>
+
         <form action="/signup-endpoint" method="POST">
             <div class="form-group">
                 <label>Username</label>
@@ -35,10 +44,15 @@
                 <label>Password</label>
                 <input type="password" name="password" required>
             </div>
-            <button type="submit" class="signup-btn">Create Account</button>
+            <button type="submit" class="signup-btn">Grow Your Account</button>
         </form>
-        <a href="signin.html" class="login-link">Already a member? Sign in</a>
+
+        <div class="footer-links">
+            <p>Already a member? <a href="signin.html">Log in here</a></p>
+            <a href="index.html">← Back to Catalogue</a>
+        </div>
     </div>
 </div>
+
 </body>
 </html>
