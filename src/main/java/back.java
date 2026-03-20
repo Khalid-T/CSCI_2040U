@@ -18,7 +18,7 @@ public class back{
 
 
     //------------------------------------login --------------------------------------------
-    private String sign_up(String username, String password, int  admin) throws SQLException {
+    public String sign_up(String username, String password, int  admin) throws SQLException {
 
         String insertSql = "INSERT INTO users (username, password, admin) VALUES (?, ?, ?)";
         
@@ -175,7 +175,7 @@ public class back{
 
         //start the Javalin Server
         Javalin server = Javalin.create(config -> {
-            // Tells Javalin to look in src/main/resources/static for your HTML/CSS
+            // Tells Javalin to look in src/main/resources/static for HTML/CSS
             config.staticFiles.add("/static");
         }).start(8080);
 
@@ -243,7 +243,7 @@ public class back{
                 String[] p = results.get(i);
                 json.append("[");
                 for (int j = 0; j < p.length; j++) {
-                    // This line cleans the text so quotes and backslashes don't break the JSON
+                    // cleans the text so quotes and backslashes don't break the JSON
                     String cleaned = (p[j] == null) ? "" : p[j].replace("\\", "\\\\").replace("\"", "\\\"");
                     json.append("\"").append(cleaned).append("\"");
                     if (j < p.length - 1) json.append(",");
@@ -264,6 +264,28 @@ public class back{
                 ctx.result(user);
             } else {
                 ctx.status(401);
+            }
+        });
+
+        //redirect from sign up to sign in
+        server.post("/signup-endpoint", ctx -> {
+            String user = ctx.formParam("username");
+            String pass = ctx.formParam("password");
+
+            try {
+                // Register the user as a normal user (admin = 0)
+                appLogic.sign_up(user, pass, 0);
+
+                // OPTION A: Redirect to Sign-In (Recommended for security)
+                ctx.redirect("/signin.html?registered=true");
+
+                // OPTION B: Redirect to Home Page (If you want them logged in immediately)
+                // ctx.sessionAttribute("currentUser", user);
+                // ctx.redirect("/index.html");
+
+            } catch (SQLException e) {
+                // Redirect back to signup with an error if the username is taken
+                ctx.redirect("/signup.html?error=exists");
             }
         });
     }

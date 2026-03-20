@@ -158,6 +158,16 @@
             margin-bottom: 15px;
             font-size: 1.8rem;
         }
+
+<!--    cool shake for incorrect password    -->
+
+        @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-6px); }
+        50% { transform: translateX(6px); }
+        75% { transform: translateX(-6px); }
+    }
+
     </style>
 </head>
 
@@ -172,6 +182,11 @@
 <div class="signin-container">
     <div class="login-card">
         <h2>Member Login</h2>
+
+<!--        error if incorrect password entered-->
+        <div id="error-message" style="display: none; color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 12px; border-radius: 5px; margin-bottom: 20px; text-align: center; font-size: 0.9rem;">
+            <strong>Whoops!</strong> The username or password you entered is incorrect.
+        </div>
 
         <form action="/login-endpoint" method="POST">
             <div class="form-group">
@@ -197,20 +212,42 @@
 
 <!--shows error when user attempts wrong input for username/password combo-->
 <script>
+    // Initialize search parameters once
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('error')) {
-        const errorDiv = document.createElement('div');
-        errorDiv.style.color = '#721c24';
-        errorDiv.style.backgroundColor = '#f8d7da';
-        errorDiv.style.padding = '10px';
-        errorDiv.style.borderRadius = '5px';
-        errorDiv.style.marginBottom = '15px';
-        errorDiv.style.textAlign = 'center';
-        errorDiv.innerText = 'Invalid username or password. Please try again.';
+    const card = document.querySelector('.login-card');
 
-        const card = document.querySelector('.login-card');
-        if (card) {
+    if (card) {
+        // 1. Handle Login Errors (Incorrect Password/Username)
+        if (urlParams.has('error')) {
+            const errorDiv = document.createElement('div');
+            errorDiv.style.color = '#721c24';
+            errorDiv.style.backgroundColor = '#f8d7da';
+            errorDiv.style.padding = '10px';
+            errorDiv.style.borderRadius = '5px';
+            errorDiv.style.marginBottom = '15px';
+            errorDiv.style.textAlign = 'center';
+            errorDiv.style.border = '1px solid #f5c6cb';
+            errorDiv.innerText = 'Invalid username or password. Please try again.';
+
+            // Add a little shake animation
+            errorDiv.style.animation = "shake 0.4s ease-in-out";
+
             card.insertBefore(errorDiv, card.firstChild);
+        }
+
+        // 2. Handle Successful Sign-Up Redirect
+        if (urlParams.has('registered')) {
+            const successDiv = document.createElement('div');
+            successDiv.style.color = '#155724';
+            successDiv.style.backgroundColor = '#d4edda';
+            successDiv.style.padding = '10px';
+            successDiv.style.borderRadius = '5px';
+            successDiv.style.marginBottom = '15px';
+            successDiv.style.textAlign = 'center';
+            successDiv.style.border = '1px solid #c3e6cb';
+            successDiv.innerText = 'Account created successfully! Please sign in.';
+
+            card.insertBefore(successDiv, card.firstChild);
         }
     }
 </script>
