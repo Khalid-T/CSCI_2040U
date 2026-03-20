@@ -180,7 +180,7 @@ public class BackTest {
         seedSearchData();
         // since we seeded 2 Alabama plants, we expect exactly 2 back
         java.util.List<String[]> results = app.searchByState("Alabama");
-        assertEquals(10, results.size(), "Alabama should return 10 seeded results");
+        assertEquals(2, results.size(), "Alabama should return 2 seeded results");
     }
 
     @Test

@@ -124,7 +124,7 @@ public class back{
 
 
 
-    //-------------------- SreachByName --------------------------------------------
+    //-------------------- SearchByName --------------------------------------------
     public List<String[]> searchByName(String name) throws SQLException {
         List<String[]> results = new ArrayList<>();
         String query = "SELECT symbol, scientific_name, common_name, state FROM plants WHERE LOWER(common_name) LIKE LOWER(?)";
@@ -146,6 +146,7 @@ public class back{
         }
     }
 
+    //-------------------- SearchByState --------------------------------------------
     public List<String[]> searchByState(String state) throws SQLException {
         List<String[]> results = new ArrayList<>();
 
