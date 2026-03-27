@@ -60,7 +60,12 @@ public class BackTest {
     void testLoginUserNotFound() throws SQLException {
         assertFalse(app.login("ghost", "123"));
     }
-
+    // ---------------------- password reset ---------------------
+    @Test
+    void testpasswordReset() throws SQLException {
+        String result = app.reset_password("admin", "admin", "newpass");
+        assertEquals("Password updated", result);
+    }
     //--------------------- SIGN-UP TESTS ---------------------
     @Test
     void testSignupNormalUser() throws SQLException {
