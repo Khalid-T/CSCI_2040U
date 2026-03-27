@@ -233,16 +233,14 @@ public class back{
 
             String result = appLogic.add(symbol, scientificName, commonName, state);
 
-            ctx.redirect("/admin.html?message=" + java.net.URLEncoder.encode(result, "UTF-8"));
-        });
+            ctx.result(result);        });
 
         server.post("/remove-plant", ctx -> {
             String commonName = ctx.formParam("common_name");
 
             String result = appLogic.remove(commonName);
 
-            ctx.redirect("/admin.html?message=" + java.net.URLEncoder.encode(result, "UTF-8"));
-        });
+            ctx.result(result);        });
         server.get("/search-plants", ctx -> {
             String query     = ctx.queryParam("q");
             String state     = ctx.queryParam("state");
@@ -275,14 +273,7 @@ public class back{
         });
 
         //
-        server.get("/get-user", ctx -> {
-            String user = ctx.sessionAttribute("currentUser");
-            if (user != null) {
-                ctx.result(user);
-            } else {
-                ctx.status(401);
-            }
-        });
+
         server.get("/get-user", ctx -> {
             String user = ctx.sessionAttribute("currentUser");
             if (user != null) {
