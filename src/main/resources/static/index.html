@@ -106,7 +106,7 @@
         /* 3. Search Section */
         .search-section {
             max-width: 900px;
-            margin: -60px auto 80px;
+            margin: -60px auto 0;
             padding: 0 20px;
         }
 
@@ -116,17 +116,6 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.08);
             border-radius: 2px;
             overflow: hidden;
-        }
-
-        .search-filter {
-            background: #fcfcfc;
-            border: none;
-            border-right: 1px solid #eee;
-            padding: 0 20px;
-            font-family: inherit;
-            color: var(--sage);
-            outline: none;
-            cursor: pointer;
         }
 
         .search-field {
@@ -148,22 +137,168 @@
             font-size: 0.8rem;
             cursor: pointer;
             transition: background 0.3s;
+            white-space: nowrap;
         }
 
         .search-trigger:hover {
             background: #25554a;
         }
 
-        /* 4. Catalogue Grid */
+        /* Filter toggle link */
+        .filter-toggle {
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .filter-toggle button {
+            background: none;
+            border: none;
+            color: var(--sage);
+            font-family: inherit;
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 4px 0;
+            border-bottom: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        .filter-toggle button:hover {
+            color: var(--forest);
+            border-bottom-color: var(--gold);
+        }
+
+        /* Filter panel */
+        .filter-panel {
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+        }
+
+        .filter-panel.open {
+            max-height: 300px;
+        }
+
+        .filter-panel-inner {
+            padding: 24px 28px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px 24px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--sage);
+            margin-bottom: 6px;
+        }
+
+        .filter-group select {
+            width: 100%;
+            border: 1px solid #e8e4dc;
+            background: var(--parchment);
+            padding: 9px 12px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            color: var(--text);
+            outline: none;
+            border-radius: 2px;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237b8d7e'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        .filter-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding-top: 4px;
+        }
+
+        .filter-clear {
+            background: none;
+            border: 1px solid #ddd;
+            color: var(--sage);
+            font-family: inherit;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 8px 20px;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        .filter-clear:hover {
+            border-color: var(--sage);
+            color: var(--text);
+        }
+
+        /* Active filter chips */
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+            min-height: 0;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--forest);
+            color: white;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        .filter-chip button {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            font-size: 0.85rem;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .filter-chip button:hover { color: white; }
+
+        /* 4. Results count */
+        .results-meta {
+            max-width: 1400px;
+            margin: 28px auto 10px;
+            padding: 0 5%;
+            font-size: 0.75rem;
+            color: var(--sage);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            min-height: 20px;
+        }
+
+        /* 5. Catalogue Grid */
         .catalogue-grid {
             display: grid;
-            /* Changed auto-fill to auto-fit for better centering logic */
             grid-template-columns: repeat(auto-fit, minmax(320px, 350px));
             gap: 50px;
-            padding: 0 5% 100px;
+            padding: 20px 5% 100px;
             justify-content: center;
-            max-width: 1400px; /* Prevents the grid from getting too wide on huge monitors */
-            margin: 0 auto;    /* Centers the whole grid container */
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .plant-card {
@@ -219,8 +354,27 @@
             color: var(--gold);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
             display: block;
+        }
+
+        /* Extra filter metadata badges on search result cards */
+        .plant-meta {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .meta-badge {
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 3px 10px;
+            border: 1px solid #e8e4dc;
+            color: var(--sage);
+            border-radius: 20px;
         }
 
         .wishlist-action {
@@ -272,20 +426,93 @@
 </header>
 
 <section class="search-section">
+    <!-- Name search bar -->
     <div class="search-bar-wrapper">
-        <select id="search-type" class="search-filter">
-            <option value="name">Specimen Name</option>
-            <option value="state">Native Region</option>
-        </select>
-        <input type="text" id="search-input" class="search-field" placeholder="Search the collection...">
+        <input type="text" id="search-input" class="search-field" placeholder="Search by specimen name...">
         <button onclick="performSearch()" class="search-trigger">Explore</button>
     </div>
+
+    <!-- Toggle filters -->
+    <div class="filter-toggle">
+        <button onclick="toggleFilters()" id="filter-toggle-btn">⚙ Filters</button>
+    </div>
+
+    <!-- Filter panel (hidden by default) -->
+    <div class="filter-panel" id="filter-panel">
+        <div class="filter-panel-inner">
+            <div class="filter-group">
+                <label>Native Region</label>
+                <select id="filter-state">
+                    <option value="">All Regions</option>
+                    <option>Alabama</option><option>Alaska</option><option>Arizona</option>
+                    <option>Arkansas</option><option>California</option><option>Colorado</option>
+                    <option>Connecticut</option><option>Delaware</option><option>Florida</option>
+                    <option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+                    <option>Illinois</option><option>Indiana</option><option>Iowa</option>
+                    <option>Kansas</option><option>Kentucky</option><option>Louisiana</option>
+                    <option>Maine</option><option>Maryland</option><option>Massachusetts</option>
+                    <option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+                    <option>Missouri</option><option>Montana</option><option>Nebraska</option>
+                    <option>Nevada</option><option>New Hampshire</option><option>New Jersey</option>
+                    <option>New Mexico</option><option>New York</option><option>North Carolina</option>
+                    <option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+                    <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option>
+                    <option>South Carolina</option><option>South Dakota</option><option>Tennessee</option>
+                    <option>Texas</option><option>Utah</option><option>Vermont</option>
+                    <option>Virginia</option><option>Washington</option><option>West Virginia</option>
+                    <option>Wisconsin</option><option>Wyoming</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Light Requirement</label>
+                <select id="filter-light">
+                    <option value="">Any Light</option>
+                    <option>Full Sun</option>
+                    <option>Partial Shade</option>
+                    <option>Full Shade</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Water Requirement</label>
+                <select id="filter-water">
+                    <option value="">Any Water</option>
+                    <option>Low</option>
+                    <option>Moderate</option>
+                    <option>High</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Plant Type</label>
+                <select id="filter-plant-type">
+                    <option value="">All Types</option>
+                    <option>Tree</option>
+                    <option>Shrub</option>
+                    <option>Herb</option>
+                    <option>Grass</option>
+                    <option>Fern</option>
+                    <option>Vine</option>
+                </select>
+            </div>
+
+            <div class="filter-actions">
+                <button class="filter-clear" onclick="clearFilters()">Clear Filters</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active filter chips (shown below the panel) -->
+    <div class="active-filters" id="active-filters"></div>
 </section>
 
+<!-- Results count line -->
+<div class="results-meta" id="results-meta"></div>
 
 <main id="plants-display" class="catalogue-grid">
 
-    <!-- 1. Greenland Moss -->
+    <!-- Default static cards shown before any search -->
     <div class="plant-card">
         <div class="image-wrapper">
             <img src="./Images/134097934838567213.jpg" alt="Greenland Moss">
@@ -298,7 +525,6 @@
         </div>
     </div>
 
-    <!-- 2. Monstera Adansonii -->
     <div class="plant-card">
         <div class="image-wrapper">
             <img src="./Images/photo3.jpg" alt="Monstera Adansonii">
@@ -311,7 +537,6 @@
         </div>
     </div>
 
-    <!-- 3. Snake Plant (Added Back) -->
     <div class="plant-card">
         <div class="image-wrapper">
             <img src="./Images/snake-plant.jpg" alt="Snake Plant">
@@ -324,7 +549,6 @@
         </div>
     </div>
 
-    <!-- 4. Peace Lily (Added Back) -->
     <div class="plant-card">
         <div class="image-wrapper">
             <img src="./Images/peace-lily.jpg" alt="Peace Lily">
@@ -340,7 +564,7 @@
 </main>
 
 <script>
-    // 1. AUTHENTICATION LOGIC
+    // ── Auth ──────────────────────────────────────────────────────────────────
     fetch('/get-user')
         .then(res => res.ok ? res.text() : null)
         .then(username => {
@@ -349,39 +573,123 @@
             if (username && username.trim() !== "") {
                 welcomeMsg.innerText = `Welcome back, ${username}`;
                 authLink.innerText = "Logout";
-                authLink.href = "/signin.html"; // Adjust to /logout if you have a specific route
+                authLink.href = "/logout";
             }
         })
-        .catch(err => console.log("Guest browsing mode active."));
+        .catch(() => {});
 
-    // 2. SEARCH LOGIC
+    // ── Filter panel toggle ───────────────────────────────────────────────────
+    function toggleFilters() {
+        const panel = document.getElementById('filter-panel');
+        const btn   = document.getElementById('filter-toggle-btn');
+        panel.classList.toggle('open');
+        btn.textContent = panel.classList.contains('open') ? '✕ Close Filters' : '⚙ Filters';
+    }
+
+    function clearFilters() {
+        document.getElementById('filter-state').value     = '';
+        document.getElementById('filter-light').value     = '';
+        document.getElementById('filter-water').value     = '';
+        document.getElementById('filter-plant-type').value = '';
+        updateChips();
+    }
+
+    // Re-run search whenever a filter changes
+    ['filter-state','filter-light','filter-water','filter-plant-type'].forEach(id => {
+        document.getElementById(id).addEventListener('change', () => {
+            updateChips();
+            // Only auto-search if the user has already typed something or filters are set
+            if (document.getElementById('search-input').value || hasActiveFilters()) {
+                performSearch();
+            }
+        });
+    });
+
+    function hasActiveFilters() {
+        return ['filter-state','filter-light','filter-water','filter-plant-type']
+            .some(id => document.getElementById(id).value !== '');
+    }
+
+    // ── Active filter chips ───────────────────────────────────────────────────
+    const filterLabels = {
+        'filter-state':      'Region',
+        'filter-light':      'Light',
+        'filter-water':      'Water',
+        'filter-plant-type': 'Type'
+    };
+
+    function updateChips() {
+        const container = document.getElementById('active-filters');
+        container.innerHTML = '';
+        Object.entries(filterLabels).forEach(([id, label]) => {
+            const val = document.getElementById(id).value;
+            if (!val) return;
+            const chip = document.createElement('span');
+            chip.className = 'filter-chip';
+            chip.innerHTML = `${label}: ${val} <button onclick="clearFilter('${id}')" title="Remove">×</button>`;
+            container.appendChild(chip);
+        });
+    }
+
+    function clearFilter(id) {
+        document.getElementById(id).value = '';
+        updateChips();
+        if (document.getElementById('search-input').value || hasActiveFilters()) {
+            performSearch();
+        }
+    }
+
+    // ── Search ────────────────────────────────────────────────────────────────
     function performSearch() {
-        const query = document.getElementById('search-input').value;
-        const type = document.getElementById('search-type').value;
+        const query     = document.getElementById('search-input').value;
+        const state     = document.getElementById('filter-state').value;
+        const light     = document.getElementById('filter-light').value;
+        const water     = document.getElementById('filter-water').value;
+        const plantType = document.getElementById('filter-plant-type').value;
+
+        // Require at least a name query or one filter to be active
+        if (!query && !state && !light && !water && !plantType) return;
+
         const display = document.getElementById('plants-display');
-
-        if (!query) return;
-
+        const meta    = document.getElementById('results-meta');
         display.innerHTML = "<div class='status-msg'>Consulting the botanical archives...</div>";
+        meta.textContent  = '';
 
-        fetch(`/search-plants?q=${encodeURIComponent(query)}&type=${type}`)
+        // Build query string — only include filters that have values
+        const params = new URLSearchParams({ q: query });
+        if (state)     params.set('state',      state);
+        if (light)     params.set('light',      light);
+        if (water)     params.set('water',      water);
+        if (plantType) params.set('plant_type', plantType);
+
+        fetch(`/search-plants?${params.toString()}`)
             .then(response => {
                 if (!response.ok) throw new Error("Connection lost");
                 return response.json();
             })
             .then(plants => {
-                display.innerHTML = ""; // Clear existing grid
+                display.innerHTML = '';
 
                 if (!plants || plants.length === 0) {
+                    meta.textContent = '';
                     display.innerHTML = "<div class='status-msg'>No specimens found matching your criteria.</div>";
                     return;
                 }
 
+                meta.textContent = `${plants.length} specimen${plants.length !== 1 ? 's' : ''} found`;
+
+                // plant[0]=symbol, [1]=scientific_name, [2]=common_name,
+                // [3]=state, [4]=light_requirement, [5]=water_requirement, [6]=plant_type
                 plants.forEach(plant => {
                     const card = document.createElement('div');
                     card.className = 'plant-card';
 
-                    // Note: plant[0]=ID, plant[1]=Scientific, plant[2]=Common, plant[3]=State
+                    // Build meta badges only for fields that exist
+                    let badges = '';
+                    if (plant[4]) badges += `<span class="meta-badge">☀ ${plant[4]}</span>`;
+                    if (plant[5]) badges += `<span class="meta-badge">💧 ${plant[5]}</span>`;
+                    if (plant[6]) badges += `<span class="meta-badge">🌿 ${plant[6]}</span>`;
+
                     card.innerHTML = `
                         <div class="image-wrapper">
                             <div style="display:flex; height:100%; align-items:center; justify-content:center; background:#f4f1ec; color:#7b8d7e; font-size:3rem;">🌿</div>
@@ -390,18 +698,19 @@
                             <h3>${plant[2] || "Unnamed Specimen"}</h3>
                             <p class="scientific-name">${plant[1] || "Species unclassified"}</p>
                             <span class="region-tag">Native to: ${plant[3] || "Various Regions"}</span>
+                            <div class="plant-meta">${badges}</div>
                             <button class="wishlist-action" onclick="alert('Added ${plant[2]} to collection!')">+ Add to Collection</button>
                         </div>
                     `;
                     display.appendChild(card);
                 });
             })
-            .catch(err => {
+            .catch(() => {
                 display.innerHTML = `<div class='status-msg' style='color:#a34a4a;'>Archive connection error. <br><small>Ensure back.java is active in IntelliJ</small></div>`;
             });
     }
 
-    // 3. ENTER KEY SUPPORT
+    // Enter key triggers search
     document.getElementById("search-input").addEventListener("keypress", (e) => {
         if (e.key === "Enter") performSearch();
     });
