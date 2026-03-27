@@ -540,7 +540,7 @@
             transition: max-height 0.4s ease;
         }
         .admin-drawer.open {
-            max-height: 600px;
+          max-height: 1200px;
         }
         .admin-drawer-inner {
             display: flex;
@@ -614,6 +614,20 @@
             text-align: center;
             min-height: 20px;
         }
+    .admin-form-card select {
+    width: 100%;
+    border: 1px solid #e8e4dc;
+    background: var(--parchment);
+    padding: 9px 12px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    color: var(--text);
+    outline: none;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
     </style>
 
     <div class="admin-bar">
@@ -630,7 +644,52 @@
                 <label>Common Name</label>
                 <input type="text" id="admin-common">
                 <label>State</label>
-                <input type="text" id="admin-state">
+                <select id="admin-state">
+                    <option value="">— Select —</option>
+                    <option>Alabama</option><option>Alaska</option><option>Arizona</option>
+                    <option>Arkansas</option><option>California</option><option>Colorado</option>
+                    <option>Connecticut</option><option>Delaware</option><option>Florida</option>
+                    <option>Georgia</option><option>Hawaii</option><option>Idaho</option>
+                    <option>Illinois</option><option>Indiana</option><option>Iowa</option>
+                    <option>Kansas</option><option>Kentucky</option><option>Louisiana</option>
+                    <option>Maine</option><option>Maryland</option><option>Massachusetts</option>
+                    <option>Michigan</option><option>Minnesota</option><option>Mississippi</option>
+                    <option>Missouri</option><option>Montana</option><option>Nebraska</option>
+                    <option>Nevada</option><option>New Hampshire</option><option>New Jersey</option>
+                    <option>New Mexico</option><option>New York</option><option>North Carolina</option>
+                    <option>North Dakota</option><option>Ohio</option><option>Oklahoma</option>
+                    <option>Oregon</option><option>Pennsylvania</option><option>Rhode Island</option>
+                    <option>South Carolina</option><option>South Dakota</option><option>Tennessee</option>
+                    <option>Texas</option><option>Utah</option><option>Vermont</option>
+                    <option>Virginia</option><option>Washington</option><option>West Virginia</option>
+                    <option>Wisconsin</option><option>Wyoming</option>
+                </select>
+                <label>Light Requirement</label>
+                <select id="admin-light">
+                    <option value="">— Select —</option>
+                    <option>Full Sun</option>
+                    <option>Partial Shade</option>
+                    <option>Full Shade</option>
+                </select>
+                <label>Water Requirement</label>
+                <select id="admin-water">
+                    <option value="">— Select —</option>
+                    <option>Low</option>
+                    <option>Moderate</option>
+                    <option>High</option>
+                </select>
+                <label>Plant Type</label>
+                <select id="admin-type">
+                    <option value="">— Select —</option>
+                    <option>Tree</option>
+                    <option>Shrub</option>
+                    <option>Herb</option>
+                    <option>Grass</option>
+                    <option>Fern</option>
+                    <option>Vine</option>
+                </select>
+                <label>Description</label>
+                <textarea id="admin-desc" placeholder="Brief description of the plant..." style="width:100%; border:1px solid #e8e4dc; background:var(--parchment); padding:9px 12px; font-family:inherit; font-size:0.85rem; color:var(--text); outline:none; box-sizing:border-box; margin-bottom:12px; resize:vertical; min-height:60px;"></textarea>
                 <button class="admin-submit-btn btn-add" onclick="adminAdd()">Add Plant</button>
             </div>
             <div class="admin-form-card">
@@ -835,6 +894,7 @@
                             <p class="scientific-name">${plant[1] || "Species unclassified"}</p>
                             <span class="region-tag">Native to: ${plant[3] || "Various Regions"}</span>
                             <div class="plant-meta">${badges}</div>
+                            ${plant[7] ? `<p style="font-size:0.8rem; color:var(--sage); margin:0 0 12px; line-height:1.5;">${plant[7]}</p>` : ''}
                             <button class="wishlist-action" onclick="alert('Added ${plant[2]} to collection!')">+ Add to Collection</button>
                         </div>
                     `;
@@ -868,25 +928,33 @@
     }
 
     function adminAdd() {
-        const form = new URLSearchParams();
-        form.set('symbol', document.getElementById('admin-symbol').value);
-        form.set('scientific_name', document.getElementById('admin-sci').value);
-        form.set('common_name', document.getElementById('admin-common').value);
-        form.set('state', document.getElementById('admin-state').value);
+    const form = new URLSearchParams();
+    form.set('symbol', document.getElementById('admin-symbol').value);
+    form.set('scientific_name', document.getElementById('admin-sci').value);
+    form.set('common_name', document.getElementById('admin-common').value);
+    form.set('state', document.getElementById('admin-state').value);
+    form.set('light_requirement', document.getElementById('admin-light').value);
+    form.set('water_requirement', document.getElementById('admin-water').value);
+    form.set('plant_type', document.getElementById('admin-type').value);
+    form.set('description', document.getElementById('admin-desc').value);
 
-        fetch('/add-plant', { method: 'POST', body: form, redirect: 'manual' })
-            .then(() => {
-                document.getElementById('admin-msg').textContent = '✓ Plant added successfully';
-                document.getElementById('admin-symbol').value = '';
-                document.getElementById('admin-sci').value = '';
-                document.getElementById('admin-common').value = '';
-                document.getElementById('admin-state').value = '';
-                setTimeout(() => document.getElementById('admin-msg').textContent = '', 3000);
-            })
-            .catch(() => {
-                document.getElementById('admin-msg').textContent = '✗ Failed to add plant';
-            });
-    }
+    fetch('/add-plant', { method: 'POST', body: form, redirect: 'manual' })
+        .then(() => {
+            document.getElementById('admin-msg').textContent = '✓ Plant added successfully';
+            document.getElementById('admin-symbol').value = '';
+            document.getElementById('admin-sci').value = '';
+            document.getElementById('admin-common').value = '';
+            document.getElementById('admin-state').value = '';
+            document.getElementById('admin-light').value = '';
+            document.getElementById('admin-water').value = '';
+            document.getElementById('admin-type').value = '';
+            document.getElementById('admin-desc').value = '';
+            setTimeout(() => document.getElementById('admin-msg').textContent = '', 3000);
+        })
+        .catch(() => {
+            document.getElementById('admin-msg').textContent = '✗ Failed to add plant';
+        });
+}
 
     function adminRemove() {
         const form = new URLSearchParams();
