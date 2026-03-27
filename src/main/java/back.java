@@ -15,32 +15,27 @@ public class back{
     public void close() throws SQLException {
         conn.close();
     }
+// ----------------------- reset password -------------------------------------------
+  public String reset_password(String username, String password, String new_pass) throws SQLException {
+      PreparedStatement check = conn.prepareStatement( "SELECT * FROM users WHERE username = ? AND password = ?");
+      check.setString(1, username);
+      check.setString(2, password);
+      ResultSet rs = check.executeQuery();
+      
+     if (rs.next() == false) {
+         System.out.println("[log] failed reset password for "+ username);
+         return "Username or password is wrong";
+     }
+     PreparedStatement update = conn.prepareStatement("UPDATE users SET password = ? WHERE username = ?");
+      update.setString(1, new_pass);
+      update.setString(2, username);
+      update.executeUpdate();
 
-    public String reset_pass(String username, String password, String new_pass) throws SQLException {
-        PreparedStatement check = conn.prepareStatement( "SELECT * FROM users WHERE username = ? AND password = ?");
-        check.setString(1, username);
-        check.setString(2, password);
-        ResultSet rs = check.executeQuery();
-
-        if (!rs.next()) {
-            rs.close();
-            check.close();
-            System.out.println("[log] reset password failed: bad credentials for " + username);
-            return "Invalid username or password";
-        }
-        rs.close();
-        check.close();
-
-        PreparedStatement update = conn.prepareStatement("UPDATE users SET password = ? WHERE username = ?");
-        update.setString(1, new_pass);
-        update.setString(2, username);
-        int rows = update.executeUpdate();
-        update.close();
-
-        System.out.println("[log] password reset for " + username);
-        return "Password updated successfully";
-}
-    //------------------------------------login --------------------------------------------
+      System.out.println("[log] Password for "+ username + " has been updated");
+      return "Password updated!";
+  }
+    
+   //------------------------------------login --------------------------------------------
     public String sign_up(String username, String password, int  admin) throws SQLException {
 
         String insertSql = "INSERT INTO users (username, password, admin) VALUES (?, ?, ?)";
