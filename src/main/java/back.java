@@ -214,12 +214,8 @@ public class back{
 
             if (appLogic.login(user, pass)) {
                 ctx.sessionAttribute("currentUser", user);
+                ctx.redirect("/index.html");
 
-                if (appLogic.isAdmin()) {
-                    ctx.redirect("/admin.html");
-                } else {
-                    ctx.redirect("/index.html");
-                }
             } else {
                 ctx.redirect("/signin.html?error=1");
             }
@@ -283,6 +279,23 @@ public class back{
             String user = ctx.sessionAttribute("currentUser");
             if (user != null) {
                 ctx.result(user);
+            } else {
+                ctx.status(401);
+            }
+        });
+        server.get("/get-user", ctx -> {
+            String user = ctx.sessionAttribute("currentUser");
+            if (user != null) {
+                ctx.result(user);
+            } else {
+                ctx.status(401);
+            }
+        });
+
+        server.get("/is-admin", ctx -> {
+            String user = ctx.sessionAttribute("currentUser");
+            if (user != null) {
+                ctx.result(appLogic.isAdmin() ? "true" : "false");
             } else {
                 ctx.status(401);
             }

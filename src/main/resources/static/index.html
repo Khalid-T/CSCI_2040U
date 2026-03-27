@@ -506,7 +506,143 @@
     <!-- Active filter chips (shown below the panel) -->
     <div class="active-filters" id="active-filters"></div>
 </section>
+<!-- Admin Panel (hidden by default, shown only for admins) -->
+<div id="admin-panel" style="display:none;">
+    <style>
+        .admin-bar {
+            max-width: 900px;
+            margin: 30px auto 0;
+            padding: 0 20px;
+        }
+        .admin-toggle-btn {
+            background: none;
+            border: 1px solid var(--gold);
+            color: var(--forest);
+            font-family: inherit;
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 8px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .admin-toggle-btn:hover {
+            background: var(--forest);
+            color: white;
+            border-color: var(--forest);
+        }
+        .admin-drawer {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .admin-drawer.open {
+            max-height: 600px;
+        }
+        .admin-drawer-inner {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            padding: 20px 0;
+        }
+        .admin-form-card {
+            flex: 1;
+            min-width: 280px;
+            background: white;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        }
+        .admin-form-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--forest);
+            font-size: 1.3rem;
+            margin: 0 0 16px;
+        }
+        .admin-form-card label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--sage);
+            margin-bottom: 4px;
+            display: block;
+        }
+        .admin-form-card input[type="text"] {
+            width: 100%;
+            border: 1px solid #e8e4dc;
+            background: var(--parchment);
+            padding: 9px 12px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            color: var(--text);
+            outline: none;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+        }
+        .admin-form-card input[type="text"]:focus {
+            border-color: var(--sage);
+        }
+        .admin-submit-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .btn-add {
+            background: var(--forest);
+            color: white;
+        }
+        .btn-add:hover { background: #25554a; }
+        .btn-remove {
+            background: #8b3a3a;
+            color: white;
+        }
+        .btn-remove:hover { background: #a34a4a; }
+        .admin-msg {
+            max-width: 900px;
+            margin: 10px auto 0;
+            padding: 0 20px;
+            font-size: 0.8rem;
+            color: var(--forest);
+            text-align: center;
+            min-height: 20px;
+        }
+    </style>
 
+    <div class="admin-bar">
+        <button class="admin-toggle-btn" onclick="toggleAdmin()" id="admin-toggle-btn">🌿 Admin Tools</button>
+    </div>
+    <div class="admin-drawer" id="admin-drawer">
+        <div class="admin-drawer-inner">
+            <div class="admin-form-card">
+                <h3>Add Plant</h3>
+                <label>Symbol</label>
+                <input type="text" id="admin-symbol">
+                <label>Scientific Name</label>
+                <input type="text" id="admin-sci">
+                <label>Common Name</label>
+                <input type="text" id="admin-common">
+                <label>State</label>
+                <input type="text" id="admin-state">
+                <button class="admin-submit-btn btn-add" onclick="adminAdd()">Add Plant</button>
+            </div>
+            <div class="admin-form-card">
+                <h3>Remove Plant</h3>
+                <label>Common Name</label>
+                <input type="text" id="admin-remove-name">
+                <button class="admin-submit-btn btn-remove" onclick="adminRemove()">Remove Plant</button>
+            </div>
+        </div>
+    </div>
+    <div class="admin-msg" id="admin-msg"></div>
+</div>
 <!-- Results count line -->
 <div class="results-meta" id="results-meta"></div>
 
@@ -714,6 +850,58 @@
     document.getElementById("search-input").addEventListener("keypress", (e) => {
         if (e.key === "Enter") performSearch();
     });
+    // ── Admin Panel ───────────────────────────────────────────────────────
+    fetch('/is-admin')
+        .then(res => res.ok ? res.text() : null)
+        .then(val => {
+            if (val === 'true') {
+                document.getElementById('admin-panel').style.display = 'block';
+            }
+        })
+        .catch(() => {});
+
+    function toggleAdmin() {
+        const drawer = document.getElementById('admin-drawer');
+        const btn = document.getElementById('admin-toggle-btn');
+        drawer.classList.toggle('open');
+        btn.textContent = drawer.classList.contains('open') ? '✕ Close Admin Tools' : '🌿 Admin Tools';
+    }
+
+    function adminAdd() {
+        const form = new URLSearchParams();
+        form.set('symbol', document.getElementById('admin-symbol').value);
+        form.set('scientific_name', document.getElementById('admin-sci').value);
+        form.set('common_name', document.getElementById('admin-common').value);
+        form.set('state', document.getElementById('admin-state').value);
+
+        fetch('/add-plant', { method: 'POST', body: form, redirect: 'manual' })
+            .then(() => {
+                document.getElementById('admin-msg').textContent = '✓ Plant added successfully';
+                document.getElementById('admin-symbol').value = '';
+                document.getElementById('admin-sci').value = '';
+                document.getElementById('admin-common').value = '';
+                document.getElementById('admin-state').value = '';
+                setTimeout(() => document.getElementById('admin-msg').textContent = '', 3000);
+            })
+            .catch(() => {
+                document.getElementById('admin-msg').textContent = '✗ Failed to add plant';
+            });
+    }
+
+    function adminRemove() {
+        const form = new URLSearchParams();
+        form.set('common_name', document.getElementById('admin-remove-name').value);
+
+        fetch('/remove-plant', { method: 'POST', body: form, redirect: 'manual' })
+            .then(() => {
+                document.getElementById('admin-msg').textContent = '✓ Plant removed successfully';
+                document.getElementById('admin-remove-name').value = '';
+                setTimeout(() => document.getElementById('admin-msg').textContent = '', 3000);
+            })
+            .catch(() => {
+                document.getElementById('admin-msg').textContent = '✗ Failed to remove plant';
+            });
+    }
 </script>
 
 </body>
