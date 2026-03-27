@@ -24,6 +24,19 @@ public class back{
          System.out.println("[log] failed reset password for "+ username);
          return "Username or password is wrong";
      }
+    
+
+     /*
+       Test 
+       if (new_pass.equals(password)) {
+       return "New password cannot equal old password";
+
+       } 
+    
+      
+      */
+   
+     
      PreparedStatement update = conn.prepareStatement("UPDATE users SET password = ? WHERE username = ?");
       update.setString(1, new_pass);
       update.setString(2, username);
