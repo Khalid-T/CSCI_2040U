@@ -117,24 +117,30 @@ public class back{
     //-------------------------------------------------------------------------------------
 
     // ------------------------------------ add plants to database --------------------------
-    public String  add(String Symbol,String SciName,String CommonName, String Region) throws SQLException{
+    public String add(String symbol, String scientific_name, String common_name, String state, String light_requirement, String water_requirement, String plant_type, String description) throws SQLException {
+
         if (is_admin == false){
             System.out.println("[log] login first");
             return "login as admin before adding plants";
         }
         PreparedStatement added = conn.prepareStatement(
-                                                        "INSERT INTO plants (symbol, scientific_name, common_name, state) VALUES (?, ?, ?, ?)" );
+        "INSERT INTO plants (symbol, scientific_name, common_name, state, light_requirement, water_requirement, plant_type, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
-        added.setString(1, Symbol);
-        added.setString(2, SciName);
-        added.setString(3, CommonName);
-        added.setString(4, Region);
+
+        added.setString(1, symbol);
+        added.setString(2, scientific_name);
+        added.setString(3, common_name);
+        added.setString(4, state);
+        added.setString(5, light_requirement);
+        added.setString(6, water_requirement);
+        added.setString(7, plant_type);
+        added.setString(8, description);
         added.executeUpdate();
 
-        System.out.println("[log] added "+ CommonName+ " to the database");
+        System.out.println("[log] added "+ common_name+ " to the database");
 
         added.close();
-        return "\nadded "+ CommonName+ " to the list";
+        return "\nadded "+ common_name+ " to the list";
 
     }
     //-------------------------------------------------------------------------------
@@ -225,15 +231,17 @@ public class back{
             appLogic.logout();
             ctx.redirect("/signin.html");
         });
-        server.post("/add-plant", ctx -> {
-            String symbol = ctx.formParam("symbol");
-            String scientificName = ctx.formParam("scientific_name");
-            String commonName = ctx.formParam("common_name");
-            String state = ctx.formParam("state");
-
-            String result = appLogic.add(symbol, scientificName, commonName, state);
-
-            ctx.result(result);        });
+       server.post("/add-plant", ctx -> {
+               String symbol = ctx.formParam("symbol");
+               String scientificName = ctx.formParam("scientific_name");
+               String commonName = ctx.formParam("common_name");
+               String state = ctx.formParam("state");
+               String lightRequirement = ctx.formParam("light_requirement");
+               String waterRequirement = ctx.formParam("water_requirement");
+               String plantType = ctx.formParam("plant_type");
+               String description = ctx.formParam("description");
+               String result = appLogic.add(symbol, scientificName, commonName, state, lightRequirement, waterRequirement, plantType, description);
+               ctx.result(result);        });
 
         server.post("/remove-plant", ctx -> {
             String commonName = ctx.formParam("common_name");
