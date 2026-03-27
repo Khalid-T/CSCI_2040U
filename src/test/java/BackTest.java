@@ -436,7 +436,7 @@ public class BackTest {
         seedSearchData();
         List<String[]> results = app.searchWithFilters("RED MAPLE", null, null, null, null);
         assertFalse(results.isEmpty());
-        assertEquals(7, results.get(0).length,
-            "Each result should have 7 fields: symbol, scientific_name, common_name, state, light, water, plant_type");
+        assertEquals(8, results.get(0).length,
+            "Each result should have 8 fields: symbol, scientific_name, common_name, state, light_requirement, water_requerment, plant_type, description");
     }
 }
