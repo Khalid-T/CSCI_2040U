@@ -64,8 +64,9 @@ public class BackTest {
     // ---------------------- password reset ---------------------
     @Test
     void testpasswordReset() throws SQLException {
+        app.sign_up("admin", "admin", 1);
         String result = app.reset_password("admin", "admin", "newpass");
-        assertEquals("Password updated", result);
+        assertEquals("Password updated!", result);
     }
     //--------------------- SIGN-UP TESTS ---------------------
     @Test

@@ -1,9 +1,7 @@
 import java.sql.*;
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import io.javalin.Javalin;
-import io.javalin.http.Context;
 
 
 public class back{
