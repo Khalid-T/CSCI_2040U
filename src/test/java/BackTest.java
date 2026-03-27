@@ -183,7 +183,7 @@ public class BackTest {
     @Test
     void testSearchByStateAlabama() throws SQLException {
         seedSearchData();
-        // since we seeded 2 Alabama plants, we expect exactly 2 back
+        // since we seeded 1 Alabama plants, we expect exactly 2 back
         java.util.List<String[]> results = app.searchByState("Alabama");
         assertEquals(2, results.size(), "Alabama should return 2 seeded results");
     }
