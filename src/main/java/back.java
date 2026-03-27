@@ -1,9 +1,7 @@
 import java.sql.*;
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import io.javalin.Javalin;
-import io.javalin.http.Context;
 
 
 public class back{
@@ -15,9 +13,27 @@ public class back{
     public void close() throws SQLException {
         conn.close();
     }
+// ----------------------- reset password -------------------------------------------
+  public String reset_password(String username, String password, String new_pass) throws SQLException {
+      PreparedStatement check = conn.prepareStatement( "SELECT * FROM users WHERE username = ? AND password = ?");
+      check.setString(1, username);
+      check.setString(2, password);
+      ResultSet rs = check.executeQuery();
+      
+     if (rs.next() == false) {
+         System.out.println("[log] failed reset password for "+ username);
+         return "Username or password is wrong";
+     }
+     PreparedStatement update = conn.prepareStatement("UPDATE users SET password = ? WHERE username = ?");
+      update.setString(1, new_pass);
+      update.setString(2, username);
+      update.executeUpdate();
 
-
-    //------------------------------------login --------------------------------------------
+      System.out.println("[log] Password for "+ username + " has been updated");
+      return "Password updated!";
+  }
+    
+   //------------------------------------login --------------------------------------------
     public String sign_up(String username, String password, int  admin) throws SQLException {
 
         String insertSql = "INSERT INTO users (username, password, admin) VALUES (?, ?, ?)";
@@ -74,7 +90,8 @@ public class back{
              System.out.println("[log] " + username + " login didn't work");
          }
 
-    return success;    }
+    return success;
+    }
     //---------------------------------------------------------------
 
 
@@ -124,52 +141,57 @@ public class back{
 
 
 
-    //-------------------- SearchByName --------------------------------------------
-    public List<String[]> searchByName(String name) throws SQLException {
+    // -------------------- searchWithFilters ----------------------------------------
+    // searches by name (partial match) then narrows by any of the following filters: 
+    // state, light_requirement, water_requirement, plant_type
+    public List<String[]> searchWithFilters(String name, String state, String light, String water, String plantType) throws SQLException {
         List<String[]> results = new ArrayList<>();
-        String query = "SELECT symbol, scientific_name, common_name, state FROM plants WHERE LOWER(common_name) LIKE LOWER(?)";
-
-        try (PreparedStatement searched = conn.prepareStatement(query)) {
-            searched.setString(1, "%" + name + "%");  // adding % allows partial matches
-            try (ResultSet rs = searched.executeQuery()) {
+ 
+        // Build the query dynamically based on which filters are active
+        StringBuilder sql = new StringBuilder(
+            "SELECT symbol, scientific_name, common_name, state, light_requirement, water_requirement, plant_type " +
+            "FROM plants WHERE LOWER(common_name) LIKE LOWER(?)"
+        );
+ 
+        if (state != null && !state.isEmpty())     sql.append(" AND LOWER(state) = LOWER(?)");
+        if (light != null && !light.isEmpty())     sql.append(" AND LOWER(light_requirement) = LOWER(?)");
+        if (water != null && !water.isEmpty())     sql.append(" AND LOWER(water_requirement) = LOWER(?)");
+        if (plantType != null && !plantType.isEmpty()) sql.append(" AND LOWER(plant_type) = LOWER(?)");
+ 
+        try (PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+            int idx = 1;
+            stmt.setString(idx++, "%" + (name != null ? name : "") + "%");
+            if (state != null && !state.isEmpty())     stmt.setString(idx++, state);
+            if (light != null && !light.isEmpty())     stmt.setString(idx++, light);
+            if (water != null && !water.isEmpty())     stmt.setString(idx++, water);
+            if (plantType != null && !plantType.isEmpty()) stmt.setString(idx++, plantType);
+ 
+            try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     results.add(new String[]{
-                            rs.getString("symbol"), rs.getString("scientific_name"),
-                            rs.getString("common_name"), rs.getString("state")
-                        });
+                        rs.getString("symbol"),
+                        rs.getString("scientific_name"),
+                        rs.getString("common_name"),
+                        rs.getString("state"),
+                        rs.getString("light_requirement"),
+                        rs.getString("water_requirement"),
+                        rs.getString("plant_type")
+                    });
                 }
             }
-            return results;
         } catch (SQLException e) {
-            System.out.println("Error searching by name: " + e.getMessage());
-            return results;
+            System.out.println("Error in searchWithFilters: " + e.getMessage());
         }
-    }
-
-    //-------------------- SearchByState --------------------------------------------
-    public List<String[]> searchByState(String state) throws SQLException {
-        List<String[]> results = new ArrayList<>();
-
-        String query = "SELECT symbol, scientific_name, common_name, state FROM plants WHERE LOWER(state) LIKE LOWER(?)";
-
-        try (PreparedStatement searched = conn.prepareStatement(query)) {
-            searched.setString(1, "%" + state + "%"); // adding % allows partial matches
-            try (ResultSet rs = searched.executeQuery()) {
-                while (rs.next()) {
-                    results.add(new String[]{
-                            rs.getString("symbol"),
-                            rs.getString("scientific_name"),
-                            rs.getString("common_name"),
-                            rs.getString("state")
-                        });
-                }
-            }
-        }
+ 
         return results;
     }
+
+
     public boolean isAdmin() {
         return is_admin;
     }
+
+
     public static void main(String[] args) throws Exception {
         //connection logic
         back appLogic = new back();
@@ -226,25 +248,23 @@ public class back{
             ctx.redirect("/admin.html?message=" + java.net.URLEncoder.encode(result, "UTF-8"));
         });
         server.get("/search-plants", ctx -> {
-            String query = ctx.queryParam("q");
-            String type = ctx.queryParam("type");
-
-            System.out.println(">>> SEARCHING: " + query + " BY " + type);
-
-            List<String[]> results;
-            if ("state".equalsIgnoreCase(type)) {
-                results = appLogic.searchByState(query);
-            } else {
-                results = appLogic.searchByName(query);
-            }
-
-            // --- ROBUST MANUAL JSON FIX ---
+            String query     = ctx.queryParam("q");
+            String state     = ctx.queryParam("state");
+            String light     = ctx.queryParam("light");
+            String water     = ctx.queryParam("water");
+            String plantType = ctx.queryParam("plant_type");
+ 
+            System.out.println(">>> SEARCH — name: " + query
+                + " | state: " + state + " | light: " + light
+                + " | water: " + water + " | type: " + plantType);
+ 
+            List<String[]> results = appLogic.searchWithFilters(query, state, light, water, plantType);
+ 
             StringBuilder json = new StringBuilder("[");
             for (int i = 0; i < results.size(); i++) {
                 String[] p = results.get(i);
                 json.append("[");
                 for (int j = 0; j < p.length; j++) {
-                    // cleans the text so quotes and backslashes don't break the JSON
                     String cleaned = (p[j] == null) ? "" : p[j].replace("\\", "\\\\").replace("\"", "\\\"");
                     json.append("\"").append(cleaned).append("\"");
                     if (j < p.length - 1) json.append(",");
@@ -253,7 +273,7 @@ public class back{
                 if (i < results.size() - 1) json.append(",");
             }
             json.append("]");
-
+ 
             ctx.contentType("application/json");
             ctx.result(json.toString());
         });
