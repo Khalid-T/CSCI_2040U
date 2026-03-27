@@ -25,16 +25,12 @@ public class back{
          return "Username or password is wrong";
      }
     
-
-     /*
-       Test 
-       if (new_pass.equals(password)) {
+      if (new_pass.equals(password)) {
        return "New password cannot equal old password";
 
        } 
     
       
-      */
    
      
      PreparedStatement update = conn.prepareStatement("UPDATE users SET password = ? WHERE username = ?");
