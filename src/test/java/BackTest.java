@@ -63,11 +63,32 @@ public class BackTest {
     }
     // ---------------------- password reset ---------------------
     @Test
+
     void testpasswordReset() throws SQLException {
         app.sign_up("admin", "admin", 1);
         String result = app.reset_password("admin", "admin", "newpass");
         assertEquals("Password updated!", result);
     }
+    @Test
+    void testResetPasswordUserNotThere() throws SQLException{
+        String result = app.reset_password("notReal", "notReal", "newpass");
+        assertEquals("Username or password is wrong",result);
+    }
+    @Test
+    void testPasswordReset() throws SQLException {
+        app.sign_up("admin","changethis",0);
+        String result = app.reset_password("admin", "changethis", "newpass");
+        assertEquals("Password updated!", result);
+    }
+    @Test
+    void testResetPasswordSameAsOld_ShouldFail() throws SQLException {
+        app.sign_up("admin", "password", 0);
+        
+        String result = app.reset_password("admin", "password", "password");
+        
+        assertEquals("New password cannot be the same as the old password", result);
+    }
+    
     //--------------------- SIGN-UP TESTS ---------------------
     @Test
     void testSignupNormalUser() throws SQLException {
