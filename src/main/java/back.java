@@ -16,7 +16,30 @@ public class back{
         conn.close();
     }
 
+    public String reset_pass(String username, String password, String new_pass) throws SQLException {
+        PreparedStatement check = conn.prepareStatement( "SELECT * FROM users WHERE username = ? AND password = ?");
+        check.setString(1, username);
+        check.setString(2, password);
+        ResultSet rs = check.executeQuery();
 
+        if (!rs.next()) {
+            rs.close();
+            check.close();
+            System.out.println("[log] reset password failed: bad credentials for " + username);
+            return "Invalid username or password";
+        }
+        rs.close();
+        check.close();
+
+        PreparedStatement update = conn.prepareStatement("UPDATE users SET password = ? WHERE username = ?");
+        update.setString(1, new_pass);
+        update.setString(2, username);
+        int rows = update.executeUpdate();
+        update.close();
+
+        System.out.println("[log] password reset for " + username);
+        return "Password updated successfully";
+}
     //------------------------------------login --------------------------------------------
     public String sign_up(String username, String password, int  admin) throws SQLException {
 
@@ -74,7 +97,8 @@ public class back{
              System.out.println("[log] " + username + " login didn't work");
          }
 
-    return success;    }
+    return success;
+    }
     //---------------------------------------------------------------
 
 
