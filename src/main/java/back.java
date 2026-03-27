@@ -155,8 +155,7 @@ public class back{
  
         // Build the query dynamically based on which filters are active
         StringBuilder sql = new StringBuilder(
-            "SELECT symbol, scientific_name, common_name, state, light_requirement, water_requirement, plant_type " +
-            "FROM plants WHERE LOWER(common_name) LIKE LOWER(?)"
+                "SELECT symbol, scientific_name, common_name, state, light_requirement, water_requirement, plant_type, description " +            "FROM plants WHERE LOWER(common_name) LIKE LOWER(?)"
         );
  
         if (state != null && !state.isEmpty())     sql.append(" AND LOWER(state) = LOWER(?)");
@@ -181,7 +180,9 @@ public class back{
                         rs.getString("state"),
                         rs.getString("light_requirement"),
                         rs.getString("water_requirement"),
-                        rs.getString("plant_type")
+                            rs.getString("plant_type"),
+                            rs.getString("description")
+
                     });
                 }
             }
