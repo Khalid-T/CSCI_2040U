@@ -31,7 +31,9 @@ public class BackTest {
                         state TEXT,
                         light_requirement TEXT,
                         water_requirement TEXT,
-                        plant_type TEXT
+                        plant_type TEXT,
+                        description TEXT
+
                     );
                 """);
                 stmt.close();
@@ -80,14 +82,22 @@ public class BackTest {
         String result = app.reset_password("admin", "changethis", "newpass");
         assertEquals("Password updated!", result);
     }
+
+    /*
+     *
+     *
+     * -------------------------------------------------------------------- THIS FAILES
+     *
+     * 
+     */
     @Test
     void testResetPasswordSameAsOld_ShouldFail() throws SQLException {
         app.sign_up("admin", "password", 0);
         
         String result = app.reset_password("admin", "password", "password");
-        
-        assertEquals("New password cannot be the same as the old password", result);
+        assertEquals("New password cannot equal old password", result);
     }
+    //----------------------------------------------------------------------------------------
     
     //--------------------- SIGN-UP TESTS ---------------------
     @Test
@@ -122,7 +132,7 @@ public class BackTest {
     //--------------------- ADD PLANT TESTS -------------------
     @Test
     void testAddWithoutAdmin() throws SQLException {
-        String result = app.add("SYM", "Sci", "Rose", "CA");
+        String result = app.add("SYM", "Sci", "Rose", "CA", "Full Sun", "Moderate", "Herb", "A common garden rose.");
         assertEquals("login as admin before adding plants", result);
     }
  
@@ -130,7 +140,7 @@ public class BackTest {
     void testAddWithAdmin() throws SQLException {
         app.sign_up("admin", "pass", 1);
         app.login("admin", "pass");
-        String result = app.add("SYM", "Sci", "Rose", "CA");
+        String result = app.add("SYM", "Sci", "Rose", "CA", "Full Sun", "Moderate", "Herb", "A common garden rose.");
         assertTrue(result.contains("added Rose"));
     }
  
@@ -153,7 +163,7 @@ public class BackTest {
     void testRemoveWithAdmin() throws SQLException {
         app.sign_up("admin", "pass", 1);
         app.login("admin", "pass");
-        app.add("SYM", "Sci", "Rose", "CA");
+        app.add("SYM", "Sci", "Rose", "CA", "Full Sun", "Moderate", "Herb", "A common garden rose.");
         String result = app.remove("Rose");
         assertTrue(result.contains("Removed"));
     }
